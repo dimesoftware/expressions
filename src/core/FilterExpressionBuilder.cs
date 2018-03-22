@@ -24,7 +24,7 @@ namespace System.Linq.Expressions
         /// </summary>
         public ExpressionBuilder(IDateTimeParser dateTimeParser) : this()
         {
-            this.DateTimeParser = dateTimeParser;
+            DateTimeParser = dateTimeParser;
         }
 
         #endregion Constructor
@@ -82,8 +82,6 @@ namespace System.Linq.Expressions
 
         #region Methods
 
-        #region Public Methods
-
         /// <summary>
         /// Expression builder for a struct type as the property to filter on
         /// </summary>
@@ -121,7 +119,7 @@ namespace System.Linq.Expressions
             // Get converter for type
             TypeConverter converter = TypeDescriptor.GetConverter(propertyType);
 
-            return this.CreateExpression(operation, value, initialExpression, memberField, converter);
+            return CreateExpression(operation, value, initialExpression, memberField, converter);
         }
 
         /// <summary>
@@ -133,11 +131,15 @@ namespace System.Linq.Expressions
         /// <param name="value"></param>
         /// <param name="ignoreCase"></param>
         /// <returns></returns>
-        public Expression<Func<T, bool>> GetExpression<TEntity>(IDictionary<int, string> fields, string operation, object value, string ignoreCase)
+        public Expression<Func<T, bool>> GetExpression<TEntity>(
+            IDictionary<int, string> fields,
+            string operation,
+            object value,
+            string ignoreCase)
         {
             // Get field expressions
             ParameterExpression initialExpression = Expression.Parameter(typeof(T), "x");
-            IEnumerable<MemberExpression> fieldExpressions = this.GetFields(fields, initialExpression);
+            IEnumerable<MemberExpression> fieldExpressions = GetFields(fields, initialExpression);
             MemberExpression memberField = fieldExpressions.Last();
 
             // Get property type
@@ -146,16 +148,17 @@ namespace System.Linq.Expressions
             // Get converter for type
             TypeConverter converter = TypeDescriptor.GetConverter(propertyType);
 
-            return this.CreateExpression(operation, value, initialExpression, memberField, converter);
+            return CreateExpression(operation, value, initialExpression, memberField, converter);
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
+        ///  <summary>
+        /// 
+        ///  </summary>
+        ///  <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
         /// <param name="field"></param>
-        /// <param name="complexProperty"></param>
-        /// <returns></returns>
+        ///  <param name="complexProperty"></param>
+        ///  <returns></returns>
         public Expression<Func<T, TKey>> CreateExpression<TEntity, TKey>(string field, string complexProperty)
         {
             ParameterExpression initialExpression = Expression.Parameter(typeof(T), "x");
@@ -163,19 +166,11 @@ namespace System.Linq.Expressions
             if (!string.IsNullOrEmpty(complexProperty))
             {
                 MemberExpression memberField = Expression.PropertyOrField(member, complexProperty);
-                Expression<Func<T, TKey>> lambda = Expression.Lambda<Func<T, TKey>>(memberField, initialExpression);
-                return lambda;
+                return Expression.Lambda<Func<T, TKey>>(memberField, initialExpression);
             }
-            else
-            {
-                Expression<Func<T, TKey>> lambda = Expression.Lambda<Func<T, TKey>>(member, initialExpression);
-                return lambda;
-            }
+
+            return Expression.Lambda<Func<T, TKey>>(member, initialExpression);
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
 
         /// <summary>
         ///
@@ -190,7 +185,7 @@ namespace System.Linq.Expressions
         private Expression<Func<T, bool>> CreateExpression(string operation, object value, ParameterExpression param, MemberExpression memberField, TypeConverter converter)
         {
             Expression<Func<T, bool>> whereClause = default(Expression<Func<T, bool>>);
-            bool isValidDateTime = this.CanParseDateTime(value);
+            bool isValidDateTime = CanParseDateTime(value);
 
             // Convert property to type
             if (converter.IsValid(value) || isValidDateTime)
@@ -199,7 +194,7 @@ namespace System.Linq.Expressions
 
                 // Convert value to constant value
                 object result = value != null ?
-                    isValidDateTime && this.DateTimeParser != null ? this.DateTimeParser.Parse(value) :
+                    isValidDateTime && DateTimeParser != null ? DateTimeParser.Parse(value) :
                     converter.ConvertFrom(value.ToString()) : value;
 
                 ConstantExpression constant = Expression.Constant(result);
@@ -223,7 +218,7 @@ namespace System.Linq.Expressions
                         if (containsMethodInfo != null)
                             comparingExpression = Expression.Call(memberField, containsMethodInfo, Expression.Convert(constant, memberField.Type));
                         else
-                            return this.CreateExpression("eq", value, param, memberField, converter);
+                            return CreateExpression("eq", value, param, memberField, converter);
                         break;
 
                     case Operators.DoesNotContain:
@@ -326,8 +321,6 @@ namespace System.Linq.Expressions
                 yield return member;
             }
         }
-
-        #endregion Private Methods
 
         #endregion Methods
     }

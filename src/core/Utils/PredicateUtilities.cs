@@ -6,38 +6,30 @@ namespace System.Linq.Expressions
     /// Enables the efficient, dynamic composition of query predicates.
     /// </summary>
     internal static class PredicateUtilities
-    {
-        /// <summary>
-        /// Creates a predicate expression from the specified lambda expression.
-        /// </summary>
-        internal static Expression<Func<T, bool>> Create<T>(Expression<Func<T, bool>> predicate)
-            => predicate;
-
+    {      
         /// <summary>
         /// Combines the first predicate with the second using the logical "and".
         /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
         internal static Expression<Func<T, bool>> And<T>(Expression<Func<T, bool>> first, Expression<Func<T, bool>> second)
             => first.Compose(second, Expression.AndAlso);
 
         /// <summary>
         /// Combines the first predicate with the second using the logical "or".
         /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
         internal static Expression<Func<T, bool>> Or<T>(Expression<Func<T, bool>> first, Expression<Func<T, bool>> second)
             => first.Compose(second, Expression.OrElse);
-
-        /// <summary>
-        /// Negates the predicate.
-        /// </summary>
-        internal static Expression<Func<T, bool>> Not<T>(this Expression<Func<T, bool>> expression)
-        {
-            UnaryExpression negated = Expression.Not(expression.Body);
-            return Expression.Lambda<Func<T, bool>>(negated, expression.Parameters);
-        }
-
+    
         /// <summary>
         /// Combines the first expression with the second using the specified merge function.
         /// </summary>
-        private static Expression<T> Compose<T>(this Expression<T> first, Expression<T> second, Func<Expression, Expression, Expression> merge)
+        private static Expression<T> Compose<T>(
+            this Expression<T> first, 
+            Expression<T> second, 
+            Func<Expression, Expression, Expression> merge)
         {
             // zip parameters (map from parameters of second to parameters of first)
             Dictionary<ParameterExpression, ParameterExpression> map = first.Parameters
@@ -59,7 +51,7 @@ namespace System.Linq.Expressions
             /// <summary>
             /// 
             /// </summary>
-            private readonly Dictionary<ParameterExpression, ParameterExpression> map;
+            private readonly Dictionary<ParameterExpression, ParameterExpression> _map;
 
             /// <summary>
             /// 
@@ -67,7 +59,7 @@ namespace System.Linq.Expressions
             /// <param name="map"></param>
             private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
-                this.map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
+                _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
             }
 
             /// <summary>
@@ -86,7 +78,7 @@ namespace System.Linq.Expressions
             /// <returns></returns>
             protected override Expression VisitParameter(ParameterExpression p)
             {
-                if (map.TryGetValue(p, out ParameterExpression replacement))
+                if (_map.TryGetValue(p, out ParameterExpression replacement))
                     p = replacement;
 
                 return base.VisitParameter(p);

@@ -12,13 +12,14 @@
     <AssemblyTitle>Dime.Utilities.Expressions Tests</AssemblyTitle>
     <Authors>Dimenics</Authors>
     <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
-    <AssemblyName>Dime.Utilities.Expressions.Tests</AssemblyName>
+    <AssemblyName>Dime.Expressions.Tests</AssemblyName>
     <PackageId>Dime.Utilities.Expressions.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">1.1.1</RuntimeFrameworkVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Dime.Expressions.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

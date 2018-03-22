@@ -27,7 +27,11 @@ namespace System.Linq.Expressions
         /// <param name="value"></param>
         /// <param name="ignoreCase"></param>
         /// <returns></returns>
-        Expression<Func<T, bool>> GetExpression<TEntity>(IDictionary<int, string> fields, string operation, object value, string ignoreCase);
+        Expression<Func<T, bool>> GetExpression<TEntity>(
+            IDictionary<int, string> fields,
+            string operation,
+            object value,
+            string ignoreCase);
 
         /// <summary>
         ///
