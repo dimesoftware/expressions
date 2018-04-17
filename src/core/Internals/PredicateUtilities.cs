@@ -6,64 +6,63 @@ namespace System.Linq.Expressions
     /// Enables the efficient, dynamic composition of query predicates.
     /// </summary>
     internal static class PredicateUtilities
-    {      
+    {
         /// <summary>
         /// Combines the first predicate with the second using the logical "and".
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
+        /// <param name="first">The first expression</param>
+        /// <param name="second">The second expression</param>
+        /// <returns>A merged expression that requires a true evaluation of both expressions</returns>
         internal static Expression<Func<T, bool>> And<T>(Expression<Func<T, bool>> first, Expression<Func<T, bool>> second)
             => first.Compose(second, Expression.AndAlso);
 
         /// <summary>
         /// Combines the first predicate with the second using the logical "or".
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
+        /// <param name="first">The first expression</param>
+        /// <param name="second">The second expression</param>
+        /// <returns>A merged expression that requires a true evaluation of at least one expression</returns>
         internal static Expression<Func<T, bool>> Or<T>(Expression<Func<T, bool>> first, Expression<Func<T, bool>> second)
             => first.Compose(second, Expression.OrElse);
-    
+
         /// <summary>
         /// Combines the first expression with the second using the specified merge function.
         /// </summary>
         private static Expression<T> Compose<T>(
-            this Expression<T> first, 
-            Expression<T> second, 
+            this Expression<T> first,
+            Expression<T> second,
             Func<Expression, Expression, Expression> merge)
         {
-            // zip parameters (map from parameters of second to parameters of first)
+            // Zip parameters (map from parameters of second to parameters of first)
             Dictionary<ParameterExpression, ParameterExpression> map = first.Parameters
-                .Select((f, i) => new { f, s = second.Parameters[i] })
-                .ToDictionary(p => p.s, p => p.f);
+                .Select((x, i) => new { f = x, s = second.Parameters[i] })
+                .ToDictionary(y => y.s, p => p.f);
 
-            // replace parameters in the second lambda expression with the parameters in the first
+            // Replace parameters in the second lambda expression with the parameters in the first
             Expression secondBody = ParameterRebinder.ReplaceParameters(map, second.Body);
 
-            // create a merged lambda expression with parameters from the first expression
+            // Create a merged lambda expression with parameters from the first expression
             return Expression.Lambda<T>(merge(first.Body, secondBody), first.Parameters);
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private class ParameterRebinder : ExpressionVisitor
-        {
-            /// <summary>
-            /// 
-            /// </summary>
+        {            
             private readonly Dictionary<ParameterExpression, ParameterExpression> _map;
 
             /// <summary>
-            /// 
+            /// Initializes a new instance of the <see cref="ParameterRebinder"/> class
             /// </summary>
-            /// <param name="map"></param>
+            /// <param name="map">The dictionary of parameters</param>
             private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
                 _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="map"></param>
             /// <param name="exp"></param>

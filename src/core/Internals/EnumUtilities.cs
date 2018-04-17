@@ -13,7 +13,7 @@ namespace System.Linq.Expressions
         /// </summary>
         /// <typeparam name="T">The enum type</typeparam>
         /// <param name="description">The value to compare the enum's descriptions with</param>
-        /// <returns>The enum that matches the description - or the enum's default value if no match was made.</returns>        
+        /// <returns>The enum that matches the description - or the enum's default value if no match was made.</returns>
         internal static T GetValueFromDescription<T>(this string description)
         {
             var type = typeof(T);

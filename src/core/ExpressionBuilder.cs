@@ -1,74 +1,56 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 
 namespace System.Linq.Expressions
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public partial class ExpressionBuilder<T> : IOrderExpressionBuilder<T>
+    public class ExpressionBuilder : IFilterExpressionBuilder
     {
+        private IDateTimeParser _dateTimeParser;
+        private IDoubleParser _doubleParser;
+
         /// <summary>
         ///
         /// </summary>
-        /// <param name="dataIndex"></param>
-        /// <returns></returns>        
-        public Expression<Func<T, object>> GetExpression(string dataIndex)
+        /// <param name="dateTimeParser"></param>
+        /// <returns></returns>
+        public ExpressionBuilder WithDateTimeParser(IDateTimeParser dateTimeParser)
         {
-            Type type = typeof(T);
-            ParameterExpression parameter = Expression.Parameter(type, "x");
-            Expression member = Expression.Property(parameter, dataIndex);
-
-            Type typeIfNullable = Nullable.GetUnderlyingType(member.Type);
-            if (typeIfNullable != null)
-                member = Expression.Call(member, "GetValueOrDefault", Type.EmptyTypes);
-
-            LambdaExpression currentExpression = Expression.Lambda(Expression.Convert(member, typeof(object)), new[] { parameter });
-            return (Expression<Func<T, object>>)currentExpression;
+            _dateTimeParser = dateTimeParser;
+            return this;
         }
 
         /// <summary>
         ///
-        /// </summary>      
-        /// <param name="dataIndices"></param>
+        /// </summary>
+        /// <param name="doubleParser"></param>
         /// <returns></returns>
-        public Expression<Func<T, object>> GetExpression(IDictionary<int, string> dataIndices)
+        public ExpressionBuilder WithDoubleParser(IDoubleParser doubleParser)
         {
-            // Get type of root object
-            Type type = typeof(T);
-            ParameterExpression parentParameterExpression = Expression.Parameter(type, "x");
-            MemberExpression memberExpression = default(MemberExpression);
-
-            // Loop through each node
-            IOrderedEnumerable<KeyValuePair<int, string>> orderedList = dataIndices.OrderBy(x => x.Key);
-            for (int i = 0; i < dataIndices.Count(); i++)
-            {
-                // Get the current record in the loop
-                string dataIndex = orderedList.ElementAt(i).Value;
-
-                // If this is the first iteration, just set the variable - else append the expa
-                memberExpression = i == 0
-                    ? Expression.PropertyOrField(parentParameterExpression, dataIndex)
-                    : Expression.PropertyOrField(memberExpression, dataIndex);
-
-                // Check if the last field corresponds to a complex type or a standard type (struct)
-                if (i == dataIndices.Count() - 1)
-                {
-                    // Use some reflection to capture the class' and properties metadata
-                    PropertyInfo propertyInfo = (PropertyInfo)memberExpression.Member;
-
-                    if (propertyInfo != null && !propertyInfo.PropertyType.GetTypeInfo().IsValueType && !propertyInfo.PropertyType.GetTypeInfo().IsPrimitive && propertyInfo.PropertyType != typeof(string))
-                    {
-                        DefaultDisplayAttribute classDefaultDisplayAttribute = propertyInfo.PropertyType.GetTypeInfo().GetCustomAttribute<DefaultDisplayAttribute>();
-                        if (classDefaultDisplayAttribute != null)                        
-                            memberExpression = Expression.PropertyOrField(memberExpression, classDefaultDisplayAttribute.Name);                        
-                    }
-                }
-            }
-
-            UnaryExpression sortExpression = Expression.Convert(memberExpression, typeof(object));
-            return Expression.Lambda<Func<T, dynamic>>(sortExpression, parentParameterExpression);
+            _doubleParser = doubleParser;
+            return this;
         }
+
+        /// <summary>
+        /// Builds and verifies the state of the expression builder
+        /// </summary>   
+        /// <returns></returns>
+        public ExpressionBuilder Build()
+        {
+            if (_doubleParser == null || _dateTimeParser == null)
+                throw new ArgumentException();
+
+            return this;
+        }
+
+        Expression<Func<T, bool>> IFilterExpressionBuilder.GetExpression<T>(string field, string operation, object value)
+            => ((ExpressionConverter)this).GetExpression<T>(field, operation, value);
+
+        Expression<Func<T, bool>> IFilterExpressionBuilder.GetExpression<T>(IDictionary<int, string> fields, string operation, object value, string ignoreCase)
+            => ((ExpressionConverter)this).GetExpression<T>(fields, operation, value, ignoreCase);
+
+        Expression<Func<T, TKey>> IFilterExpressionBuilder.CreateExpression<T, TKey>(string field, string complexProperty)
+            => ((ExpressionConverter)this).CreateExpression<T, TKey>(field, complexProperty);
+
+        public static implicit operator ExpressionConverter(ExpressionBuilder builder)
+            => new ExpressionConverter(builder._dateTimeParser, builder._doubleParser);
     }
 }
