@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions.Internals;
-using System.Reflection;
 
 namespace System.Linq.Expressions
 {
@@ -40,13 +39,13 @@ namespace System.Linq.Expressions
         /// <returns>An expression that corresponds to the stringified query [<paramref name="field"/> - <paramref name="operation"/> - <paramref name="value"/>]</returns>
         public Expression<Func<T, bool>> GetExpression<T>(string field, string operation, object value)
         {
-            // Part of the lambda: (x) => 
+            // Part of the lambda: (x) =>
             ParameterExpression initialExpression = Expression.Parameter(typeof(T), "x");
 
             // Part of the lambda: x.Property
             MemberExpression memberField = Expression.PropertyOrField(initialExpression, field).OverrideWithDefaultDisplay();
 
-            // Join the pieces together to a lambda expression: (x) => x.Property OPERATION Value            
+            // Join the pieces together to a lambda expression: (x) => x.Property OPERATION Value
             return CreateExpression<T>(initialExpression, memberField, operation, value);
         }
 
@@ -65,7 +64,7 @@ namespace System.Linq.Expressions
             object value,
             string ignoreCase)
         {
-            // Part of the lambda: (x) => 
+            // Part of the lambda: (x) =>
             ParameterExpression initialExpression = Expression.Parameter(typeof(T), "x");
 
             // Part of the lambda: x.Property or x.Property.PropertyOfProperty
@@ -76,7 +75,7 @@ namespace System.Linq.Expressions
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TKey"></typeparam>
@@ -99,12 +98,11 @@ namespace System.Linq.Expressions
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="param">The root expression</param>
         /// <param name="memberField">The expression that leads to the property</param>
-        /// <param name="converter">The type converter that is responsible for converting an <see cref="object"/> to the type that matches the type of the <paramref name="memberField"/></param>
         /// <param name="operation">The operator defined as a string</param>
         /// <param name="value">The value to compare the field with</param>
         /// <returns></returns>
@@ -128,7 +126,7 @@ namespace System.Linq.Expressions
             object result = parser?.ConvertFrom(value) ?? converter.ConvertFrom(value);
             ConstantExpression constant = Expression.Constant(result);
 
-            // Interpret the operator and convert into an expression            
+            // Interpret the operator and convert into an expression
             Expression comparingExpression = default(Expression);
             Switcher<Operators> swatch = new Switcher<Operators>();
             Operators operatorType = operation.GetValueFromDescription<Operators>();
@@ -152,42 +150,42 @@ namespace System.Linq.Expressions
             return Expression.Lambda<Func<T, bool>>(comparingExpression, param);
         }
 
-        private static Expression DoesNotContain(MemberExpression memberField, ConstantExpression constant)
+        private static Expression DoesNotContain(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
                 ? Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type))
                 : null;
 
-        private static Expression Like(MemberExpression memberField, ConstantExpression constant)
+        private static Expression Like(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
                 ? Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type))
                 : Equals(memberField, constant);
 
-        private static Expression StartsWith(MemberExpression memberField, ConstantExpression constant)
+        private static Expression StartsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("StartsWith")
                 ? Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.Type))
                 : null;
 
-        private static Expression EndsWith(MemberExpression memberField, ConstantExpression constant)
+        private static Expression EndsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("EndsWith")
                 ? Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.Type))
                 : null;
 
-        private static Expression GreaterThanOrEqual(MemberExpression memberField, ConstantExpression constant)
+        private static Expression GreaterThanOrEqual(Expression memberField, Expression constant)
             => Expression.GreaterThanOrEqual(memberField, Expression.Convert(constant, memberField.Type));
 
-        private static Expression GreaterThan(MemberExpression memberField, ConstantExpression constant)
+        private static Expression GreaterThan(Expression memberField, Expression constant)
             => Expression.GreaterThan(memberField, Expression.Convert(constant, memberField.Type));
 
-        private static Expression LessThan(MemberExpression memberField, ConstantExpression constant)
+        private static Expression LessThan(Expression memberField, Expression constant)
             => Expression.LessThan(memberField, Expression.Convert(constant, memberField.Type));
 
-        private static Expression LessThanOrEqual(MemberExpression memberField, ConstantExpression constant)
+        private static Expression LessThanOrEqual(Expression memberField, Expression constant)
             => Expression.LessThanOrEqual(memberField, Expression.Convert(constant, memberField.Type));
 
-        private static Expression Equals(MemberExpression memberField, ConstantExpression constant)
+        private static Expression Equals(Expression memberField, Expression constant)
             => Expression.Equal(memberField, Expression.Convert(constant, memberField.Type));
 
-        private static Expression NotEquals(MemberExpression memberField, ConstantExpression constant)
+        private static Expression NotEquals(Expression memberField, Expression constant)
             => Expression.NotEqual(memberField, Expression.Convert(constant, memberField.Type));
 
         #endregion Methods

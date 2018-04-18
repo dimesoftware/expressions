@@ -4,10 +4,10 @@ using System.Reflection;
 namespace System.Linq.Expressions
 {
     /// <summary>
-    ///
+    /// Represents a generator of expressions
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public partial class ExpressionBuilder<T> : IOrderExpressionBuilder<T>
+    /// <typeparam name="T">The type for which to create the filters</typeparam>
+    public class ExpressionBuilder<T> : IOrderExpressionBuilder<T>
     {
         /// <summary>
         ///
@@ -53,18 +53,27 @@ namespace System.Linq.Expressions
                     : Expression.PropertyOrField(memberExpression, dataIndex);
 
                 // Check if the last field corresponds to a complex type or a standard type (struct)
-                if (i == dataIndices.Count - 1)
-                {
-                    // Use some reflection to capture the class' and properties metadata
-                    PropertyInfo propertyInfo = (PropertyInfo)memberExpression.Member;
+                if (i != dataIndices.Count - 1)
+                    continue;
 
-                    if (propertyInfo != null && !propertyInfo.PropertyType.GetTypeInfo().IsValueType && !propertyInfo.PropertyType.GetTypeInfo().IsPrimitive && propertyInfo.PropertyType != typeof(string))
-                    {
-                        DefaultDisplayAttribute classDefaultDisplayAttribute = propertyInfo.PropertyType.GetTypeInfo().GetCustomAttribute<DefaultDisplayAttribute>();
-                        if (classDefaultDisplayAttribute != null)
-                            memberExpression = Expression.PropertyOrField(memberExpression, classDefaultDisplayAttribute.Name);
-                    }
-                }
+                // Use some reflection to capture the class' and properties metadata
+                PropertyInfo propertyInfo = (PropertyInfo)memberExpression.Member;
+
+                bool isReferenceType = propertyInfo != null
+                                       && !propertyInfo.PropertyType.GetTypeInfo().IsValueType
+                                       && !propertyInfo.PropertyType.GetTypeInfo().IsPrimitive
+                                       && propertyInfo.PropertyType != typeof(string);
+                if (!isReferenceType)
+                    continue;
+
+                DefaultDisplayAttribute classDefaultDisplayAttribute =
+                    propertyInfo
+                        .PropertyType
+                        .GetTypeInfo()
+                        .GetCustomAttribute<DefaultDisplayAttribute>();
+
+                if (classDefaultDisplayAttribute != null)
+                    memberExpression = Expression.PropertyOrField(memberExpression, classDefaultDisplayAttribute.Name);
             }
 
             UnaryExpression sortExpression = Expression.Convert(memberExpression, typeof(object));

@@ -4,24 +4,24 @@ using System.ComponentModel;
 namespace System.Linq.Expressions
 {
     /// <summary>
-    ///
+    /// Equivalent of the <see cref="TypeDescriptor"/> but then for the <see cref="IParser"/>
     /// </summary>
     public class ParserDescriptor
     {
         private readonly List<IParser> _parsers = new List<IParser>();
 
         /// <summary>
-        ///
+        /// Adds the parser to the descriptor
         /// </summary>
-        /// <param name="parser"></param>
+        /// <param name="parser">The parser to add</param>
         public void AddParser(IParser parser)
             => _parsers.Add(parser);
 
         /// <summary>
-        /// 
+        /// Gets the <see cref="IParser"/> that corresponds to the <paramref name="converter"/>
         /// </summary>
-        /// <param name="converter"></param>
-        /// <returns></returns>
+        /// <param name="converter">The type converter</param>
+        /// <returns>The compatible parser that complements the type converter</returns>
         public IParser GetParser(TypeConverter converter)
         {
             switch (converter)
@@ -52,10 +52,10 @@ namespace System.Linq.Expressions
         }
 
         /// <summary>
-        ///
+        /// Gets or sets the index
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <param name="index">The index to get or set</param>
+        /// <returns>An IParser that matches the index</returns>
         public IParser this[int index]
         {
             get => _parsers[index];

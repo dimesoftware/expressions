@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace System.Linq.Expressions
 {
     public class ExpressionBuilder : IFilterExpressionBuilder
     {
-        private ParserDescriptor Descriptor { get; set; } = new ParserDescriptor();
+        private ParserDescriptor Descriptor { get; } = new ParserDescriptor();
 
         /// <summary>
         ///

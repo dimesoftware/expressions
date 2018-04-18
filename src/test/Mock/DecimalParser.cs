@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.Linq.Expressions;
 
 namespace Dime.Expressions.Tests.Mock
 {
@@ -40,7 +39,5 @@ namespace Dime.Expressions.Tests.Mock
             decimal parsedValue = ConvertFrom(value);
             return value.ToString() != "0" && parsedValue != 0;
         }
-
-        
     }
 }

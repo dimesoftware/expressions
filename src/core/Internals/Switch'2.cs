@@ -110,7 +110,7 @@ namespace System.Linq.Expressions.Internals
         {
             private readonly TElement _element;
             private TElement _currentCase;
-            private IDictionary<TElement, TResult> _map = new Dictionary<TElement, TResult>();
+            private readonly IDictionary<TElement, TResult> _map = new Dictionary<TElement, TResult>();
 
             /// <summary>
             /// Initializes a new instance of the <see cref="SwitchBuilder{TElement}"/> class

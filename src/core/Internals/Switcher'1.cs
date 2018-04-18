@@ -12,11 +12,11 @@
         {
             foreach (var @case in cases)
             {
-                if (@case.Condition(instance))
-                {
-                    @case.Branch(instance);
-                    break;
-                }
+                if (!@case.Condition(instance))
+                    continue;
+
+                @case.Branch(instance);
+                break;
             }
         }
 

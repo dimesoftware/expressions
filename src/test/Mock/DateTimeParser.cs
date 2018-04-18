@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
-using System.Linq.Expressions;
 
 namespace Dime.Expressions.Tests
 {

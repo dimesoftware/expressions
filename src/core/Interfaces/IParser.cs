@@ -1,34 +1,21 @@
-﻿namespace System.Linq.Expressions
+﻿namespace System.ComponentModel
 {
     /// <summary>
     /// Parser for a type
     /// </summary>
     public interface IParser
-    {       
+    {
         /// <summary>
-        ///
+        /// Validates whether the value is compatible
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">The value to verify</param>
+        /// <returns>True if the value is compatible</returns>
         bool IsValid(object value);
 
         /// <summary>
-        /// Custom type converter for instances of type <typeparamref name="T"/>
+        /// Custom type converter for instances
         /// </summary>
         /// <param name="value">The value which needs to be converted to a DateTime object</param>
         object ConvertFrom(object value);
-    }
-
-    /// <summary>
-    /// Parser for a type
-    /// </summary>
-    public interface IParser<out T> : IParser
-    {
-        /// <summary>
-        /// Custom type converter for instances of type <typeparamref name="T"/>
-        /// </summary>
-        /// <param name="value">The value which needs to be converted to a DateTime object</param>
-        /// <returns>An instance of <typeparamref name="T"/></returns>
-        new T ConvertFrom(object value);
     }
 }

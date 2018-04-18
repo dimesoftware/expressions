@@ -26,7 +26,7 @@ namespace Dime.Utilities.Expressions.Tests
         Bowler = 1
     }
 
-    [DefaultDisplay(nameof(Characteristic.Category))]
+    [DefaultDisplay(nameof(Category))]
     public class Characteristic
     {
         public int Id { get; set; }

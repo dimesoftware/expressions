@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dime.Expressions.Tests.Internals
 {
-    class ParameterExpressionUtilitiesTests
+    [TestClass]
+    public class ParameterExpressionUtilitiesTests
     {
     }
 }
