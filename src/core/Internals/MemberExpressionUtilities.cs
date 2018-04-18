@@ -35,7 +35,7 @@ namespace System.Linq.Expressions
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="memberField"></param>
         /// <param name="operation"></param>
@@ -44,7 +44,7 @@ namespace System.Linq.Expressions
             => memberField.Type.GetMethod(operation, new[] { memberField.Type }) != null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="memberField"></param>
         /// <param name="operation"></param>

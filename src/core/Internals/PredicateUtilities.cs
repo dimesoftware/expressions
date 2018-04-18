@@ -49,7 +49,7 @@ namespace System.Linq.Expressions
         ///
         /// </summary>
         private class ParameterRebinder : ExpressionVisitor
-        {            
+        {
             private readonly Dictionary<ParameterExpression, ParameterExpression> _map;
 
             /// <summary>
@@ -71,7 +71,7 @@ namespace System.Linq.Expressions
                 => new ParameterRebinder(map).Visit(exp);
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="p"></param>
             /// <returns></returns>

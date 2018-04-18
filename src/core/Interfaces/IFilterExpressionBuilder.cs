@@ -31,7 +31,7 @@ namespace System.Linq.Expressions
             string ignoreCase);
 
         ///  <summary>
-        /// 
+        ///
         ///  </summary>
         ///  <typeparam name="TKey"></typeparam>
         /// <typeparam name="T"></typeparam>

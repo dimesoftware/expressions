@@ -11,7 +11,7 @@ namespace Dime.Expressions.Tests
         [TestMethod]
         public void ExpressionUtilities_GetPropertyName_ScalarProperty_ThrowsArgumentException()
         {
-            Expression<Func<Person, object>> nameExpression = (x) => x.BirthDate;     
+            Expression<Func<Person, object>> nameExpression = (x) => x.BirthDate;
             Assert.ThrowsException<ArgumentException>(() => nameExpression.GetPropertyName(), "Expression body must be a member expression");
         }
 

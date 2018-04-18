@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 
 namespace Dime.Utilities.Expressions.Tests
-{    
+{
     public class Person
     {
         public int Id { get; set; }

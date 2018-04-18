@@ -33,7 +33,7 @@ namespace Dime.Utilities.Expressions.Tests
                 new Person { Type = PlayerType.Bowler },
                 new Person { Type = PlayerType.Golfer },
             };
-            
+
             Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Type", "like", "1");
 
             var items = persons.Where(expr.Compile());

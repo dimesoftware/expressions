@@ -8,7 +8,7 @@ namespace System.Linq.Expressions.Internals
     internal static class Switch
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="TElement"></typeparam>
         /// <param name="element"></param>
@@ -35,14 +35,14 @@ namespace System.Linq.Expressions.Internals
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <returns></returns>
             internal CaseBuilder Start()
                 => new CaseBuilder { Switch = this };
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="element"></param>
             /// <returns></returns>
@@ -53,7 +53,7 @@ namespace System.Linq.Expressions.Internals
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <typeparam name="TResult"></typeparam>
             /// <param name="result"></param>
@@ -62,17 +62,17 @@ namespace System.Linq.Expressions.Internals
                 => new SwitchBuilder<TElement, TResult>(_element, _firstCase, result).Start();
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             internal class CaseBuilder
             {
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 internal SwitchBuilder<TElement> Switch { get; set; }
 
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 /// <param name="element"></param>
                 /// <returns></returns>
@@ -81,17 +81,17 @@ namespace System.Linq.Expressions.Internals
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             internal class ThenBuilder
             {
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 internal SwitchBuilder<TElement> Switch { get; set; }
 
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 /// <typeparam name="TResult"></typeparam>
                 /// <param name="result"></param>
@@ -102,7 +102,7 @@ namespace System.Linq.Expressions.Internals
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="TElement"></typeparam>
         /// <typeparam name="TResult"></typeparam>
@@ -125,14 +125,14 @@ namespace System.Linq.Expressions.Internals
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <returns></returns>
             internal CaseBuilder Start()
                 => new CaseBuilder { Switch = this };
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="element"></param>
             /// <returns></returns>
@@ -143,7 +143,7 @@ namespace System.Linq.Expressions.Internals
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="result"></param>
             /// <returns></returns>
@@ -154,7 +154,7 @@ namespace System.Linq.Expressions.Internals
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="defaultResult"></param>
             /// <returns></returns>
@@ -162,17 +162,17 @@ namespace System.Linq.Expressions.Internals
                 => _map.TryGetValue(_element, out TResult result) ? result : defaultResult;
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             internal class CaseBuilder
             {
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 internal SwitchBuilder<TElement, TResult> Switch { get; set; }
 
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 /// <param name="element"></param>
                 /// <returns></returns>
@@ -180,7 +180,7 @@ namespace System.Linq.Expressions.Internals
                     => Switch.Case(element);
 
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 /// <param name="defaultResult"></param>
                 /// <returns></returns>
@@ -189,17 +189,17 @@ namespace System.Linq.Expressions.Internals
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             internal class ThenBuilder
             {
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 internal SwitchBuilder<TElement, TResult> Switch { get; set; }
 
                 /// <summary>
-                /// 
+                ///
                 /// </summary>
                 /// <param name="result"></param>
                 /// <returns></returns>
