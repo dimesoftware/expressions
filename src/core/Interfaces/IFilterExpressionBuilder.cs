@@ -3,7 +3,7 @@
 namespace System.Linq.Expressions
 {
     /// <summary>
-    ///
+    /// Defines the capabilities of an expression builder that creates expressions that are capable of filtering a data set
     /// </summary>
     public interface IFilterExpressionBuilder
     {

@@ -4,40 +4,38 @@ namespace System.Linq.Expressions
 {
     public class ExpressionBuilder : IFilterExpressionBuilder
     {
-        private IDateTimeParser _dateTimeParser;
-        private IDoubleParser _doubleParser;
+        private ParserDescriptor Descriptor { get; set; } = new ParserDescriptor();
 
         /// <summary>
         ///
         /// </summary>
-        /// <param name="dateTimeParser"></param>
+        /// <param name="parser"></param>
         /// <returns></returns>
-        public ExpressionBuilder WithDateTimeParser(IDateTimeParser dateTimeParser)
+        public ExpressionBuilder WithDateTimeParser(IParser<DateTime> parser)
         {
-            _dateTimeParser = dateTimeParser;
+            Descriptor.AddParser(parser);
             return this;
         }
 
         /// <summary>
         ///
         /// </summary>
-        /// <param name="doubleParser"></param>
+        /// <param name="parser"></param>
         /// <returns></returns>
-        public ExpressionBuilder WithDoubleParser(IDoubleParser doubleParser)
+        public ExpressionBuilder WithDoubleParser(IParser<double> parser)
         {
-            _doubleParser = doubleParser;
+            Descriptor.AddParser(parser);
             return this;
         }
 
         /// <summary>
-        /// Builds and verifies the state of the expression builder
-        /// </summary>   
+        ///
+        /// </summary>
+        /// <param name="parser"></param>
         /// <returns></returns>
-        public ExpressionBuilder Build()
+        public ExpressionBuilder WithDecimalParser(IParser<decimal> parser)
         {
-            if (_doubleParser == null || _dateTimeParser == null)
-                throw new ArgumentException();
-
+            Descriptor.AddParser(parser);
             return this;
         }
 
@@ -51,6 +49,6 @@ namespace System.Linq.Expressions
             => ((ExpressionConverter)this).CreateExpression<T, TKey>(field, complexProperty);
 
         public static implicit operator ExpressionConverter(ExpressionBuilder builder)
-            => new ExpressionConverter(builder._dateTimeParser, builder._doubleParser);
+            => new ExpressionConverter(builder.Descriptor);
     }
 }

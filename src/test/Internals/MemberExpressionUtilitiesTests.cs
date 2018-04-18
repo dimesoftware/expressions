@@ -12,6 +12,17 @@ namespace Dime.Expressions.Tests.Internals
     [TestClass]
     public class MemberExpressionUtilitiesTests
     {
+        public ExpressionBuilder Builder { get; set; }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            Builder = new ExpressionBuilder();
+            Builder.WithDateTimeParser(new DateTimeParser("Europe/Paris", new CultureInfo("nl-BE")));
+            Builder.WithDoubleParser(new DoubleParser());
+            Builder.WithDecimalParser(new DecimalParser());
+        }
+
         [TestMethod]
         [TestCategory("Filter")]
         public void MemberExpressionUtilities_GetExpression_FieldIsNavigationProperty_HasDefaultDisplay_TakesCategory_ShouldReturnOne()
@@ -22,10 +33,7 @@ namespace Dime.Expressions.Tests.Internals
                 new Person { Characteristic = new Characteristic {Category = "No hello world"}},
             };
 
-            IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder()
-                .WithDateTimeParser(new DateTimeParser("Europe/Paris", new CultureInfo("nl-BE")))
-                .WithDoubleParser(new DoubleParser());
-
+            IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder();
             Expression<Func<Person, bool>> expr = expressionBuilder.GetExpression<Person>("Characteristic", "like", "Hello world");
 
             var items = persons.Where(expr.Compile());
@@ -42,10 +50,7 @@ namespace Dime.Expressions.Tests.Internals
                 new Person { Characteristic = new Characteristic {Category = "No hello world"}},
             };
 
-            IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder()
-                .WithDateTimeParser(new DateTimeParser("Europe/Paris", new CultureInfo("nl-BE")))
-                .WithDoubleParser(new DoubleParser());
-
+            IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder();
             Assert.ThrowsException<ArgumentException>(
                 () => expressionBuilder.GetExpression<Person>("Characteristic.Category", "like", "Hello world"));
         }

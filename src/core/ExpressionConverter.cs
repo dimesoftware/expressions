@@ -15,18 +15,17 @@ namespace System.Linq.Expressions
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpressionConverter"/> class
         /// </summary>
-        internal ExpressionConverter(IDateTimeParser dateTimeParser, IDoubleParser doubleParser)
+        /// <param name="descriptor"></param>
+        internal ExpressionConverter(ParserDescriptor descriptor)
         {
-            DateTimeParser = dateTimeParser;
-            DoubleParser = doubleParser;
+            Descriptor = descriptor;
         }
 
         #endregion Constructor
 
         #region Properties
 
-        private IDateTimeParser DateTimeParser { get; }
-        private IDoubleParser DoubleParser { get; }
+        private ParserDescriptor Descriptor { get; }
 
         #endregion Properties
 
@@ -47,13 +46,8 @@ namespace System.Linq.Expressions
             // Part of the lambda: x.Property
             MemberExpression memberField = Expression.PropertyOrField(initialExpression, field).OverrideWithDefaultDisplay();
 
-            // Now the member field is known we can determine the type of the value member
-            // Part of the lambda: Value
-            object parsedValue = memberField.ParseValue(value);
-
-            // Join the pieces together to a lambda expression: (x) => x.Property OPERATION Value
-            TypeConverter converter = TypeDescriptor.GetConverter(memberField.Type);
-            return CreateExpression<T>(initialExpression, memberField, converter, operation, parsedValue);
+            // Join the pieces together to a lambda expression: (x) => x.Property OPERATION Value            
+            return CreateExpression<T>(initialExpression, memberField, operation, value);
         }
 
         /// <summary>
@@ -77,13 +71,8 @@ namespace System.Linq.Expressions
             // Part of the lambda: x.Property or x.Property.PropertyOfProperty
             MemberExpression memberField = initialExpression.ResolvePropertyPath(fields);
 
-            // Now the member field is known we can determine the type of the value member
-            // Part of the lambda: Value
-            object parsedValue = memberField.ParseValue(value);
-
             // Join the pieces together to a lambda expression: (x) => x.Property OPERATION Value
-            TypeConverter converter = TypeDescriptor.GetConverter(memberField.Type);
-            return CreateExpression<T>(initialExpression, memberField, converter, operation, parsedValue);
+            return CreateExpression<T>(initialExpression, memberField, operation, value);
         }
 
         /// <summary>
@@ -122,35 +111,27 @@ namespace System.Linq.Expressions
         private Expression<Func<T, bool>> CreateExpression<T>(
             ParameterExpression param,
             MemberExpression memberField,
-            TypeConverter converter,
             string operation,
             object value)
         {
-            bool isValidDateTime = DateTimeParser.CanParse(value);
-            bool isValidDouble = DoubleParser.CanParse(value);
+            // Get the converter and parser
+            TypeConverter converter = TypeDescriptor.GetConverter(memberField.Type);
+            IParser parser = Descriptor.GetParser(converter);
 
-            // Convert property to type           
-            if (converter is DoubleConverter ? !isValidDouble : !converter.IsValid(value) && !isValidDateTime)
+            // Check if the value can be converted and/or parsed
+            object parsedValue = memberField.ParseValue(value);
+            bool canConvert = parser?.IsValid(parsedValue) ?? converter.IsValid(parsedValue);
+            if (!canConvert)
                 return null;
 
             // Convert value to constant value
-            object result = value != null
-                ? isValidDateTime && !isValidDouble
-                    ? DateTimeParser.Parse(value)
-                    : converter is DoubleConverter
-                        ? DoubleParser.Parse(value)
-                        : converter.IsValid(value)
-                            ? converter.ConvertFrom(value.ToString())
-                            : null
-                : null;
-
+            object result = parser?.ConvertFrom(value) ?? converter.ConvertFrom(value);
             ConstantExpression constant = Expression.Constant(result);
 
-            // Interpret the operator and convert into an expression
-            Operators operatorType = operation.GetValueFromDescription<Operators>();
-
+            // Interpret the operator and convert into an expression            
             Expression comparingExpression = default(Expression);
             Switcher<Operators> swatch = new Switcher<Operators>();
+            Operators operatorType = operation.GetValueFromDescription<Operators>();
             swatch.Switch(operatorType,
                 swatch.Case(x => x == Operators.IsSame, x => comparingExpression = Equals(memberField, constant)),
                 swatch.Case(x => x == Operators.Equals, x => comparingExpression = Equals(memberField, constant)),

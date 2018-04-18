@@ -4,24 +4,24 @@ using System.Linq.Expressions;
 
 namespace Dime.Expressions.Tests.Mock
 {
-    public class DoubleParser : IParser<double>
+    public class DecimalParser : IParser<decimal>, IParser<decimal?>
     {
-        public DoubleParser()
+        public DecimalParser()
         {
         }
 
-        public DoubleParser(string culture)
+        public DecimalParser(string culture)
         {
             Culture = culture;
         }
 
         public string Culture { get; set; } = "nl-BE";
 
-        public double ConvertFrom(object value)
+        public decimal ConvertFrom(object value)
         {
             CultureInfo culture = new CultureInfo("nl-BE");
             NumberFormatInfo formatInfo = (NumberFormatInfo)culture.GetFormat(typeof(NumberFormatInfo));
-            double.TryParse(value.ToString(), NumberStyles.Number, formatInfo, out double db);
+            decimal.TryParse(value.ToString(), NumberStyles.Number, formatInfo, out decimal db);
 
             return db;
         }
@@ -29,13 +29,18 @@ namespace Dime.Expressions.Tests.Mock
         object IParser.ConvertFrom(object value)
             => ConvertFrom(value);
 
+        decimal? IParser<decimal?>.ConvertFrom(object value)
+            => ConvertFrom(value);
+
         public bool IsValid(object value)
         {
             if (value == null)
                 return false;
 
-            double parsedValue = ConvertFrom(value);
+            decimal parsedValue = ConvertFrom(value);
             return value.ToString() != "0" && parsedValue != 0;
         }
+
+        
     }
 }

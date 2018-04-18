@@ -7,7 +7,7 @@ namespace Dime.Expressions.Tests
     /// <summary>
     /// Represents a custom date time parser that takes a custom time zone (therefore ignoring any time zone indicated in the original date time instance) into account
     /// </summary>
-    public class DateTimeParser : IDateTimeParser
+    public class DateTimeParser : IParser<DateTime>
     {
         #region Constructor
 
@@ -15,6 +15,7 @@ namespace Dime.Expressions.Tests
         /// Initializes a new instance of the <see cref="DateTimeParser"/> class
         /// </summary>
         /// <param name="timeZone"></param>
+        /// <param name="cultureInfo"></param>
         public DateTimeParser(string timeZone, CultureInfo cultureInfo)
         {
             TimeZone = timeZone;
@@ -35,18 +36,19 @@ namespace Dime.Expressions.Tests
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public DateTime Parse(object value)
+        public DateTime ConvertFrom(object value)
             => DateTime.Parse(value.ToString());
 
-        public bool CanParse(object value)
+        object IParser.ConvertFrom(object value)
+            => ConvertFrom(value);
+
+        public bool IsValid(object value)
         {
             if (value == null)
                 return false;
 
-            double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo, out double res);
             DateTime.TryParse(value.ToString(), out var dt);
-
-            return dt > DateTime.MinValue && value.ToString() != "0" && res != 0;
+            return dt > DateTime.MinValue;
         }
     }
 }

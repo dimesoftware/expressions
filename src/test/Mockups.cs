@@ -14,6 +14,8 @@ namespace Dime.Utilities.Expressions.Tests
 
         public DateTime BirthDate { get; set; }
         public double Height { get; set; }
+        public decimal Width { get; set; }
+        public decimal? Length { get; set; }
         public Characteristic Characteristic { get; set; }
     }
 
@@ -36,7 +38,7 @@ namespace Dime.Utilities.Expressions.Tests
 
         public DateTime BirthDate { get; set; }
         public double Height { get; set; }
-
+        public decimal Width { get; set; }
         public Stats Stats { get; set; }
     }
 
