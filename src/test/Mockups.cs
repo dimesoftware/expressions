@@ -10,9 +10,11 @@ namespace Dime.Utilities.Expressions.Tests
         public string Category { get; set; }
         public string City { get; set; }
         public bool IsGolfer { get; set; }
+        public bool? IsPederast { get; set; }
         public PlayerType Type { get; set; }
 
         public DateTime BirthDate { get; set; }
+        public DateTime? JoinedNam { get; set; }
         public double Height { get; set; }
         public decimal Width { get; set; }
         public decimal? Length { get; set; }
@@ -34,11 +36,15 @@ namespace Dime.Utilities.Expressions.Tests
         public string Category { get; set; }
         public string City { get; set; }
         public bool IsGolfer { get; set; }
+        public bool? IsPederast { get; set; }
         public PlayerType Type { get; set; }
 
         public DateTime BirthDate { get; set; }
+        public DateTime? JoinedNam { get; set; }
         public double Height { get; set; }
         public decimal Width { get; set; }
+        public decimal? Length { get; set; }
+
         public Stats Stats { get; set; }
     }
 

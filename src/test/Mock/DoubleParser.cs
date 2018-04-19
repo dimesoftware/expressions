@@ -3,12 +3,8 @@ using System.Globalization;
 
 namespace Dime.Expressions.Tests.Mock
 {
-    public class DoubleParser : IParser<double>
-    {
-        public DoubleParser()
-        {
-        }
-
+    public class DoubleParser : IParser<double>, IParser<double?>
+    {  
         public DoubleParser(string culture)
         {
             Culture = culture;
@@ -18,7 +14,7 @@ namespace Dime.Expressions.Tests.Mock
 
         public double ConvertFrom(object value)
         {
-            CultureInfo culture = new CultureInfo("nl-BE");
+            CultureInfo culture = new CultureInfo(Culture);
             NumberFormatInfo formatInfo = (NumberFormatInfo)culture.GetFormat(typeof(NumberFormatInfo));
             double.TryParse(value.ToString(), NumberStyles.Number, formatInfo, out double db);
 
@@ -35,6 +31,10 @@ namespace Dime.Expressions.Tests.Mock
 
             double parsedValue = ConvertFrom(value);
             return value.ToString() != "0" && parsedValue != 0;
+
         }
+
+        double? IParser<double?>.ConvertFrom(object value)
+            => ConvertFrom(value);
     }
 }

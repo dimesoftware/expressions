@@ -5,10 +5,6 @@ namespace Dime.Expressions.Tests.Mock
 {
     public class DecimalParser : IParser<decimal>, IParser<decimal?>
     {
-        public DecimalParser()
-        {
-        }
-
         public DecimalParser(string culture)
         {
             Culture = culture;
@@ -18,7 +14,7 @@ namespace Dime.Expressions.Tests.Mock
 
         public decimal ConvertFrom(object value)
         {
-            CultureInfo culture = new CultureInfo("nl-BE");
+            CultureInfo culture = new CultureInfo(Culture);
             NumberFormatInfo formatInfo = (NumberFormatInfo)culture.GetFormat(typeof(NumberFormatInfo));
             decimal.TryParse(value.ToString(), NumberStyles.Number, formatInfo, out decimal db);
 
@@ -26,9 +22,6 @@ namespace Dime.Expressions.Tests.Mock
         }
 
         object IParser.ConvertFrom(object value)
-            => ConvertFrom(value);
-
-        decimal? IParser<decimal?>.ConvertFrom(object value)
             => ConvertFrom(value);
 
         public bool IsValid(object value)
@@ -39,5 +32,8 @@ namespace Dime.Expressions.Tests.Mock
             decimal parsedValue = ConvertFrom(value);
             return value.ToString() != "0" && parsedValue != 0;
         }
+
+        decimal? IParser<decimal?>.ConvertFrom(object value)
+            => ConvertFrom(value);
     }
 }

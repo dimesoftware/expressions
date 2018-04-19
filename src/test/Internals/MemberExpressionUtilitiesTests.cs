@@ -19,8 +19,8 @@ namespace Dime.Expressions.Tests.Internals
         {
             Builder = new ExpressionBuilder();
             Builder.WithDateTimeParser(new DateTimeParser("Europe/Paris", new CultureInfo("nl-BE")));
-            Builder.WithDoubleParser(new DoubleParser());
-            Builder.WithDecimalParser(new DecimalParser());
+            Builder.WithDoubleParser(new DoubleParser("nl-BE"));
+            Builder.WithDecimalParser(new DecimalParser("nl-BE"));
         }
 
         [TestMethod]

@@ -143,7 +143,8 @@ namespace System.Linq.Expressions
                 swatch.Case(x => x == Operators.Gte, x => comparingExpression = GreaterThanOrEqual(memberField, constant)),
                 swatch.Case(x => x == Operators.Gt, x => comparingExpression = GreaterThan(memberField, constant)),
                 swatch.Case(x => x == Operators.Lte, x => comparingExpression = LessThanOrEqual(memberField, constant)),
-                swatch.Case(x => x == Operators.Lt, x => comparingExpression = LessThan(memberField, constant))
+                swatch.Case(x => x == Operators.Lt, x => comparingExpression = LessThan(memberField, constant)),
+                swatch.Default(x => comparingExpression = null)
             );
 
             // Convert expression

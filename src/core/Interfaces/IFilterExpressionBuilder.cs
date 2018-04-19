@@ -17,18 +17,15 @@ namespace System.Linq.Expressions
         Expression<Func<T, bool>> GetExpression<T>(string field, string operation, object value);
 
         /// <summary>
-        ///
+        /// Creates an expression for the <paramref name="fields"/> parameter (navigation property) on type <typeparamref name="T"/>
         /// </summary>
-        /// <param name="fields"></param>
-        /// <param name="operation"></param>
-        /// <param name="value"></param>
+        /// <param name="fields">The path to the property on type <typeparamref name="T"/></param>
+        /// <param name="operation">The operator defined as a string</param>
+        /// <param name="value">The value to compare the field with</param>
         /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        Expression<Func<T, bool>> GetExpression<T>(
-            IDictionary<int, string> fields,
-            string operation,
-            object value,
-            string ignoreCase);
+        /// <returns>An expression that corresponds to the stringified query [<paramref name="fields"/> - <paramref name="operation"/> - <paramref name="value"/>]</returns>
+        /// <remarks>Same heuristics as <see cref="IFilterExpressionBuilder.GetExpression{T}(string,string,object)"/> but this time for navigation properties</remarks>
+        Expression<Func<T, bool>> GetExpression<T>(IDictionary<int, string> fields, string operation, object value, string ignoreCase);
 
         ///  <summary>
         ///

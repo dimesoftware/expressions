@@ -12,281 +12,401 @@ namespace Dime.Utilities.Expressions.Tests
     [TestClass]
     public class ExpressionBuilderTests
     {
-        public ExpressionBuilder Builder { get; set; }
+        [DataTestMethod]
 
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            Builder = new ExpressionBuilder();
-            Builder.WithDateTimeParser(new DateTimeParser("Europe/Paris", new CultureInfo("nl-BE")));
-            Builder.WithDoubleParser(new DoubleParser());
-            Builder.WithDecimalParser(new DecimalParser());
-        }
+        // ENUM Tests
+        [DataRow("nl-BE", "Europe/Paris", "Type", "like", "1", 2, false)]
+        [DataRow("en-US", "Europe/Paris", "Type", "like", "1", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Type", "like", "0", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "Type", "like", "0", 1, false)]
 
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Enum_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler },
-                new Person { Type = PlayerType.Bowler },
-                new Person { Type = PlayerType.Golfer },
-            };
+        // STRING Tests
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Jeffrey Lebowski", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Jeffrey", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Walter Sobchak", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Sobchak", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Theodore Donald 'Donny' Kerabatsos", 0, false)]
 
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Type", "like", "1");
+        // BOOLEAN tests
+        [DataRow("nl-BE", "Europe/Paris", "IsGolfer", "like", "true", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "IsGolfer", "like", "false", 2, false)]
 
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 2);
-        }
+        // NULLABLE BOOLEAN tests
+        [DataRow("nl-BE", "Europe/Paris", "IsPederast", "like", "true", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "IsPederast", "like", "false", 2, false)]
 
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Double_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52 },
-            };
+        // DOUBLE tests
+        [DataRow("nl-BE", "Europe/Paris", "Height", "like", "185,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "like", "185.25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "like", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "like", "185.25", 2, false)]
+        [DataRow("sv-SE", "Europe/Paris", "Height", "like", "185.25", 0, true)]
+        [DataRow("sv-SE", "Europe/Paris", "Height", "like", "185,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "gt", "185,25", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "gte", "185,25", 3, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "gt", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "gte", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "gt", "185.25", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "gte", "185.25", 3, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "gt", "185.25", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "gte", "185.25", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "lt", "190,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "lte", "185,25", 2, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "lt", "190,25", 3, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "lte", "185,25", 3, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "lt", "190.25", 2, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "lte", "185.25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "lt", "190.25", 3, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "lte", "185.25", 3, false)]
 
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Height", "like", "185,52");
+        // DECIMAL tests
+        [DataRow("nl-BE", "Europe/Paris", "Width", "like", "185,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Width", "like", "185.25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Width", "like", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Width", "like", "185.25", 2, false)]
+        [DataRow("sv-SE", "Europe/Paris", "Width", "like", "185.25", 0, true)]
+        [DataRow("sv-SE", "Europe/Paris", "Width", "like", "185,25", 2, false)]
 
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 1);
-        }
+        // NULLABLE DECIMAL tests
+        [DataRow("nl-BE", "Europe/Paris", "Length", "like", "185,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Length", "like", "185.25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Length", "like", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Length", "like", "185.25", 2, false)]
+        [DataRow("sv-SE", "Europe/Paris", "Length", "like", "185.25", 0, true)]
+        [DataRow("sv-SE", "Europe/Paris", "Length", "like", "185,25", 2, false)]
 
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Boolean_Double_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52 },
-            };
+        // DATETIME tests
+        [DataRow("nl-BE", "Europe/Paris", "BirthDate", "like", "4/12/1942", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "BirthDate", "like", "4/12/1942 18:05:02", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "BirthDate", "like", "4/12/1942", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "BirthDate", "like", "4/12/1942 18:05:02", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "BirthDate", "like", "12-4-1942", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "BirthDate", "like", "12-4-1942 18:05:02", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "BirthDate", "like", "12-4-1942", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "BirthDate", "like", "12-4-1942 18:05:02", 0, false)]
 
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("IsGolfer", "like", "185,52");
-            Assert.IsNull(expr);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Boolean_Decimal_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25, Width = 100},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Width= 150.52M },
-            };
-
-            IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder();
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Width", "like", "150,52");
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 1);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Boolean_NullableDecimal_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25, Length = 100},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Length= 150.52M },
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Length= 150.52M },
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Length= 150.53M },
-            };
-
-            IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder();
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Length", "like", "150,52");
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 2);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Double_Gt_BuildsAndExecutesExpression()
+        // NULLABLE DATETIME tests
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "12-4-2000", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "12-4-2000 18:05:02", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "12-4-2000", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "12-4-2000 18:05:02", 0, false)]
+        public void ExpressionBuilder_GetExpression_ScalarProperty(
+            string culture,
+            string timezone,
+            string property,
+            string operation,
+            string value,
+            int expectedCount,
+            bool? generatesNull = false)
         {
             List<Person> persons = new List<Person>
             {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52 },
+                new Person
+                {
+                    Type = PlayerType.Bowler,
+                    IsGolfer = false,
+                    Name = "Jeffrey Lebowski",
+                    Height = 185.25,
+                    Width = 185.25M,
+                    Length = 185.25M,
+                    BirthDate = new DateTime(1942, 12,4),
+                    JoinedNam = new DateTime(2000, 12,4),
+                    IsPederast = false
+                },
+                new Person
+                {
+                    Type = PlayerType.Bowler,
+                    IsGolfer = false,
+                    Name = "Jeffrey Lebowski",
+                    Height = 185.25,
+                    Width = 185.25M,
+                    Length =  185.25M,
+                    BirthDate = new DateTime(1942, 12,4, 18,5,2),
+                    JoinedNam = new DateTime(2000, 12,4, 18,5,2),
+                    IsPederast = false
+                },
+                new Person
+                {
+                    Type = PlayerType.Golfer,
+                    IsGolfer = true,
+                    Name = "Walter Sobchak",
+                    Height = 193.64,
+                    Width = 193.64M,
+                    Length = 193.64M,
+                    BirthDate = new DateTime(1940,1,5),
+                    JoinedNam = new DateTime(2000,1,5),
+                    IsPederast = true
+                }
             };
 
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Height", "gt", "190");
+            ExpressionBuilder builder = new ExpressionBuilder();
+            builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
+            builder.WithDoubleParser(new DoubleParser(culture));
+            builder.WithDecimalParser(new DecimalParser(culture));
 
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 1);
-        }
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(property, operation, value);
 
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Double_Gte_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
+            if (generatesNull == true)
             {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52 },
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 175.52 },
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 175 },
-            };
+                Assert.IsNull(expr);
+                return;
+            }
 
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Height", "gte", "175,52");
-
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 3);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Double_Lt_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52 },
-            };
-
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Height", "lt", "190");
-
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 1);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_Double_Lte_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 190 },
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52 },
-            };
-
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("Height", "lte", "190");
-
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 2);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_NavigationProperty_Double_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25, Characteristic = new Characteristic { Height = 185.53, Name = "Goodbye cruel world"}},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Characteristic = new Characteristic { Height = 185.52, Name = "Hello world"} },
-            };
-
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
-            navigationProperty.Add(new KeyValuePair<int, string>(2, "Height"));
-
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>(navigationProperty, "like", "185,52", "");
-
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 1);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_NavigationProperty_Boolean_Double_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25, Characteristic = new Characteristic { Height = 185.53, Name = "Goodbye cruel world"}},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Characteristic = new Characteristic { Height = 185.52, Name = "Hello world"} },
-            };
-
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
-            navigationProperty.Add(new KeyValuePair<int, string>(2, "IsGolfer"));
-
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>(navigationProperty, "like", "185,52", "");
-            Assert.IsNull(expr);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_NavigationProperty_Boolean_Double_Dot_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25, Characteristic = new Characteristic { Height = 185.53, Name = "Goodbye cruel world"}},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Characteristic = new Characteristic { Height = 185.52, Name = "Hello world"} },
-            };
-
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
-            navigationProperty.Add(new KeyValuePair<int, string>(2, "IsGolfer"));
-
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>(navigationProperty, "like", "185.52", "");
-            Assert.IsNull(expr);
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == expectedCount);
         }
 
         [DataTestMethod]
-        [DataRow("IsGolfer", "like", "185.52", true, 0)]
-        [DataRow("Width", "like", "185,52", false, 1)]
-        [DataRow("Width", "like", "185.52", false, 0)]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_NavigationProperty_OperatorAndValueAsParameter(string property, string operation, string val, bool isNull, int resultCount)
+        [DataRow("nl-BE", "Europe/Paris", "Characteristic", "like", "Well, You Know, That's Just, Like, Your Opinion, Man", 2, false)]
+        public void ExpressionBuilder_GetExpression_NavigationProperty_Root_UseDefaultDisplayAttribute(
+            string culture,
+            string timezone,
+            string property,
+            string operation,
+            string value,
+            int expectedCount,
+            bool? generatesNull = false)
         {
             List<Person> persons = new List<Person>
             {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25, Characteristic = new Characteristic { Height = 185.53, Width = 185.5M,Name = "Goodbye cruel world"}},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Characteristic = new Characteristic { Height = 185.52, Width = 185.52M, Name = "Hello world"} },
+                new Person
+                {
+                    Type = PlayerType.Bowler,
+                    IsGolfer = false,
+                    Name = "Jeffrey Lebowski",
+                    Height = 185.25,
+                    Width = 185.25M,
+                    Length = 185.25M,
+                    BirthDate = new DateTime(1942, 12,4),
+                    JoinedNam = new DateTime(2000, 12,4),
+                    Characteristic =  new Characteristic()
+                    {
+                        Category = "Well, You Know, That's Just, Like, Your Opinion, Man"
+                    }
+                },
+                new Person
+                {
+                    Type = PlayerType.Bowler,
+                    IsGolfer = false,
+                    Name = "Jeffrey Lebowski",
+                    Height = 185.25,
+                    Width = 185.25M,
+                    Length =  185.25M,
+                    BirthDate = new DateTime(1942, 12,4, 18,5,2),
+                    JoinedNam = new DateTime(2000, 12,4, 18,5,2),
+                    Characteristic =  new Characteristic()
+                    {
+                        Category = "Well, You Know, That's Just, Like, Your Opinion, Man"
+                    }
+                },
+                new Person
+                {
+                    Type = PlayerType.Golfer,
+                    IsGolfer = true,
+                    Name = "Walter Sobchak",
+                    Height = 193.64,
+                    Width = 193.64M,
+                    Length = 193.64M,
+                    BirthDate = new DateTime(1940,1,5),
+                    JoinedNam = new DateTime(2000,1,5),
+                    Characteristic =  new Characteristic()
+                    {
+                        Category = "Smokey, this is not \'Nam. This is bowling. There are rules."
+                    }
+                }
             };
+
+            ExpressionBuilder builder = new ExpressionBuilder();
+            builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
+            builder.WithDoubleParser(new DoubleParser(culture));
+            builder.WithDecimalParser(new DecimalParser(culture));
+
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(property, operation, value);
+
+            if (generatesNull == true)
+            {
+                Assert.IsNull(expr);
+                return;
+            }
+
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == expectedCount);
+        }
+
+        [DataTestMethod]
+
+        // ENUM Tests
+        [DataRow("nl-BE", "Europe/Paris", "Type", "like", "1", 2, false)]
+        [DataRow("en-US", "Europe/Paris", "Type", "like", "1", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Type", "like", "0", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "Type", "like", "0", 1, false)]
+
+        // STRING Tests
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Jeffrey Lebowski", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Jeffrey", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Walter Sobchak", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Sobchak", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Theodore Donald 'Donny' Kerabatsos", 0, false)]
+
+        // BOOLEAN tests
+        [DataRow("nl-BE", "Europe/Paris", "IsGolfer", "like", "true", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "IsGolfer", "like", "false", 2, false)]
+
+        // NULLABLE BOOLEAN tests
+        [DataRow("nl-BE", "Europe/Paris", "IsPederast", "like", "true", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "IsPederast", "like", "false", 2, false)]
+
+        // DOUBLE tests
+        [DataRow("nl-BE", "Europe/Paris", "Height", "like", "185,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "like", "185.25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "like", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "like", "185.25", 2, false)]
+        [DataRow("sv-SE", "Europe/Paris", "Height", "like", "185.25", 0, true)]
+        [DataRow("sv-SE", "Europe/Paris", "Height", "like", "185,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "gt", "185,25", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "gte", "185,25", 3, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "gt", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "gte", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "gt", "185.25", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "gte", "185.25", 3, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "gt", "185.25", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "gte", "185.25", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "lt", "190,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "lte", "185,25", 2, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "lt", "190,25", 3, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "lte", "185,25", 3, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "lt", "190.25", 2, false)]
+        [DataRow("en-US", "Europe/Paris", "Height", "lte", "185.25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "lt", "190.25", 3, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Height", "lte", "185.25", 3, false)]
+
+        // DECIMAL tests
+        [DataRow("nl-BE", "Europe/Paris", "Width", "like", "185,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Width", "like", "185.25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Width", "like", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Width", "like", "185.25", 2, false)]
+        [DataRow("sv-SE", "Europe/Paris", "Width", "like", "185.25", 0, true)]
+        [DataRow("sv-SE", "Europe/Paris", "Width", "like", "185,25", 2, false)]
+
+        // NULLABLE DECIMAL tests
+        [DataRow("nl-BE", "Europe/Paris", "Length", "like", "185,25", 2, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Length", "like", "185.25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Length", "like", "185,25", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "Length", "like", "185.25", 2, false)]
+        [DataRow("sv-SE", "Europe/Paris", "Length", "like", "185.25", 0, true)]
+        [DataRow("sv-SE", "Europe/Paris", "Length", "like", "185,25", 2, false)]
+
+        // DATETIME tests
+        [DataRow("nl-BE", "Europe/Paris", "BirthDate", "like", "4/12/1942", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "BirthDate", "like", "4/12/1942 18:05:02", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "BirthDate", "like", "4/12/1942", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "BirthDate", "like", "4/12/1942 18:05:02", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "BirthDate", "like", "12-4-1942", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "BirthDate", "like", "12-4-1942 18:05:02", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "BirthDate", "like", "12-4-1942", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "BirthDate", "like", "12-4-1942 18:05:02", 0, false)]
+
+        // NULLABLE DATETIME tests
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "12-4-2000", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "12-4-2000 18:05:02", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "12-4-2000", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "12-4-2000 18:05:02", 0, false)]
+        public void ExpressionBuilder_GetExpression_NavigationProperty(
+            string culture,
+            string timezone,
+            string property,
+            string operation,
+            string value,
+            int expectedCount,
+            bool? generatesNull = false)
+        {
+            List<Person> persons = new List<Person>
+            {
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Bowler,
+                        IsGolfer = false,
+                        Name = "Jeffrey Lebowski",
+                        Height = 185.25,
+                        Width = 185.25M,
+                        Length = 185.25M,
+                        BirthDate = new DateTime(1942, 12,4),
+                        JoinedNam = new DateTime(2000, 12,4),
+                        IsPederast = false
+                    }
+                },
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Bowler,
+                        IsGolfer = false,
+                        Name = "Jeffrey Lebowski",
+                        Height = 185.25,
+                        Width = 185.25M,
+                        Length =  185.25M,
+                        BirthDate = new DateTime(1942, 12,4, 18,5,2),
+                        JoinedNam = new DateTime(2000, 12,4, 18,5,2),
+                        IsPederast = false
+                    }
+                },
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Golfer,
+                        IsGolfer = true,
+                        Name = "Walter Sobchak",
+                        Height = 193.64,
+                        Width = 193.64M,
+                        Length = 193.64M,
+                        BirthDate = new DateTime(1940,1,5),
+                        JoinedNam = new DateTime(2000,1,5),
+                        IsPederast = true
+                    }
+                }
+            };
+
+            ExpressionBuilder builder = new ExpressionBuilder();
+            builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
+            builder.WithDoubleParser(new DoubleParser(culture));
+            builder.WithDecimalParser(new DecimalParser(culture));
 
             IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
             navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
             navigationProperty.Add(new KeyValuePair<int, string>(2, property));
 
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>(navigationProperty, operation, val, "");
-
-            if (isNull)
-                Assert.IsTrue(expr == null);
-            else
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, operation, value, "");
+            if (generatesNull == true)
             {
-                var items = persons.Where(expr.Compile()).Count();
-                Assert.IsTrue(items == resultCount);
+                Assert.IsNull(expr);
+                return;
             }
+
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == expectedCount);
         }
 
         [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_NavigationProperty_Boolean_Double_Dot_Like_NLNL_BuildsAndExecutesExpression()
+        public void ExpressionBuilder_GetExpression_MissingOperator_ThrowsArgumentExceptionException()
         {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25, Characteristic = new Characteristic { Height = 185.53, Name = "Goodbye cruel world"}},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Characteristic = new Characteristic { Height = 185.52, Name = "Hello world"} },
-            };
+            ExpressionBuilder builder = new ExpressionBuilder();
+            builder.WithDateTimeParser(new DateTimeParser("", new CultureInfo("")));
+            builder.WithDoubleParser(new DoubleParser(""));
+            builder.WithDecimalParser(new DecimalParser(""));
 
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
-            navigationProperty.Add(new KeyValuePair<int, string>(2, "IsGolfer"));
-
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>(navigationProperty, "like", "185.52", "");
-            Assert.IsTrue(persons.Count == 2);
-        }
-
-        [TestMethod]
-        [TestCategory("Filter")]
-        public void ExpressionBuilder_GetExpression_ScalarProperty_DateTime_Like_BuildsAndExecutesExpression()
-        {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Type = PlayerType.Bowler, BirthDate = new DateTime(1980,10,15), Height = 192.25, Characteristic = new Characteristic { Height = 185.53, Name = "Goodbye cruel world"}},
-                new Person { Type = PlayerType.Golfer, BirthDate = new DateTime(1960,08,3), Height = 185.52, Characteristic = new Characteristic { Height = 185.52, Name = "Hello world"} },
-            };
-
-            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)Builder).GetExpression<Person>("BirthDate", "like", "1960-08-03");
-
-            var items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 1);
+            Assert.ThrowsException<ArgumentException>(() =>
+                ((IFilterExpressionBuilder)builder).GetExpression<Person>("Type", "", "1"));
         }
     }
 }

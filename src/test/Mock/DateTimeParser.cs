@@ -7,19 +7,19 @@ namespace Dime.Expressions.Tests
     /// <summary>
     /// Represents a custom date time parser that takes a custom time zone (therefore ignoring any time zone indicated in the original date time instance) into account
     /// </summary>
-    public class DateTimeParser : IParser<DateTime>
+    public class DateTimeParser : IParser<DateTime>, IParser<DateTime?>
     {
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTimeParser"/> class
         /// </summary>
-        /// <param name="timeZone"></param>
-        /// <param name="cultureInfo"></param>
-        public DateTimeParser(string timeZone, CultureInfo cultureInfo)
+        /// <param name="timeZone">The time zone</param>
+        /// <param name="culture"></param>
+        public DateTimeParser(string timeZone, CultureInfo culture)
         {
             TimeZone = timeZone;
-            CultureInfo = cultureInfo;
+            Culture = culture;
         }
 
         #endregion Constructor
@@ -27,28 +27,50 @@ namespace Dime.Expressions.Tests
         #region Properties
 
         private string TimeZone { get; }
-        private CultureInfo CultureInfo { get; }
+        public CultureInfo Culture { get; set; }
 
         #endregion Properties
 
+        #region Methods
+
         /// <summary>
-        ///
+        /// Validates whether the value is compatible
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public DateTime ConvertFrom(object value)
-            => DateTime.Parse(value.ToString());
-
-        object IParser.ConvertFrom(object value)
-            => ConvertFrom(value);
-
+        /// <param name="value">The value to verify</param>
+        /// <returns>True if the value is compatible</returns>
         public bool IsValid(object value)
         {
             if (value == null)
                 return false;
 
-            DateTime.TryParse(value.ToString(), out var dt);
+            DateTime.TryParse(value.ToString(), Culture, DateTimeStyles.None, out var dt);
             return dt > DateTime.MinValue;
         }
+
+        /// <summary>
+        /// Custom type converter for instances of type <see cref="DateTime"/>
+        /// </summary>
+        /// <param name="value">The value which needs to be converted to a <see cref="DateTime"/> instance</param>
+        /// <returns>An instance of <see cref="DateTime"/></returns>
+        DateTime? IParser<DateTime?>.ConvertFrom(object value)
+            => ConvertFrom(value);
+
+        /// <summary>
+        /// Custom type converter for instances of type <see cref="DateTime"/>
+        /// </summary>
+        /// <param name="value">The value which needs to be converted to a <see cref="DateTime"/> instance</param>
+        /// <returns>An instance of <see cref="DateTime"/></returns>
+        object IParser.ConvertFrom(object value)
+            => ConvertFrom(value);
+
+        /// <summary>
+        /// Custom type converter for instances of type <see cref="DateTime"/>
+        /// </summary>
+        /// <param name="value">The value which needs to be converted to a <see cref="DateTime"/> instance</param>
+        /// <returns>An instance of <see cref="DateTime"/></returns>
+        public DateTime ConvertFrom(object value)
+            => DateTime.Parse(value.ToString(), Culture);
+
+        #endregion Methods
     }
 }
