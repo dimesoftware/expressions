@@ -34,6 +34,12 @@ namespace System.Linq.Expressions
         [Description("endswith")]
         EndsWith,
 
+        [Description("doesnotstartwith")]
+        DoesNotStartWith,
+
+        [Description("doesnotendwith")]
+        DoesNotEndWith,
+
         [Description("gte")]
         Gte,
 

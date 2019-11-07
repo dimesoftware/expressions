@@ -140,6 +140,8 @@ namespace System.Linq.Expressions
                 swatch.Case(x => x == Operators.DoesNotContain, x => comparingExpression = DoesNotContain(memberField, constant)),
                 swatch.Case(x => x == Operators.StartsWith, x => comparingExpression = StartsWith(memberField, constant)),
                 swatch.Case(x => x == Operators.EndsWith, x => comparingExpression = EndsWith(memberField, constant)),
+                swatch.Case(x => x == Operators.DoesNotStartWith, x => comparingExpression = DoesNotStartWith(memberField, constant)),
+                swatch.Case(x => x == Operators.DoesNotEndWith, x => comparingExpression = DoesNotEndWith(memberField, constant)),
                 swatch.Case(x => x == Operators.Gte, x => comparingExpression = GreaterThanOrEqual(memberField, constant)),
                 swatch.Case(x => x == Operators.Gt, x => comparingExpression = GreaterThan(memberField, constant)),
                 swatch.Case(x => x == Operators.Lte, x => comparingExpression = LessThanOrEqual(memberField, constant)),
@@ -153,13 +155,23 @@ namespace System.Linq.Expressions
 
         private static Expression DoesNotContain(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
-                ? Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type))
+                ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type)))
                 : null;
 
         private static Expression Like(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
                 ? Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type))
                 : Equals(memberField, constant);
+
+        private static Expression DoesNotStartWith(MemberExpression memberField, Expression constant)
+            => memberField.HasOperator("StartsWith")
+                ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.Type)))
+                : null;
+
+        private static Expression DoesNotEndWith(MemberExpression memberField, Expression constant)
+            => memberField.HasOperator("EndsWith")
+                ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.Type)))
+                : null;
 
         private static Expression StartsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("StartsWith")
