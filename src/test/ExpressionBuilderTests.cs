@@ -62,6 +62,11 @@ namespace Dime.Utilities.Expressions.Tests
         [DataRow("nl-BE", "Europe/Paris", "Height", "lt", "190.25", 3, false)]
         [DataRow("nl-BE", "Europe/Paris", "Height", "lte", "185.25", 3, false)]
 
+        // INT tests
+        [DataRow("nl-BE", "Europe/Paris", "Id", "endswith", "1", 1, true)]
+        [DataRow("nl-BE", "Europe/Paris", "Id", "startswith", "1", 1, true)]
+        [DataRow("nl-BE", "Europe/Paris", "Id", "nullorempty", "1", 1, true)]
+
         // DECIMAL tests
         [DataRow("nl-BE", "Europe/Paris", "Width", "like", "185,25", 2, false)]
         [DataRow("nl-BE", "Europe/Paris", "Width", "like", "185.25", 0, false)]
@@ -110,6 +115,7 @@ namespace Dime.Utilities.Expressions.Tests
             {
                 new Person
                 {
+                    Id = 1,
                     Type = PlayerType.Bowler,
                     IsGolfer = false,
                     Name = "Jeffrey Lebowski",
@@ -122,6 +128,7 @@ namespace Dime.Utilities.Expressions.Tests
                 },
                 new Person
                 {
+                    Id = 2,
                     Type = PlayerType.Bowler,
                     IsGolfer = false,
                     Name = "Jeffrey Lebowski",
@@ -134,6 +141,7 @@ namespace Dime.Utilities.Expressions.Tests
                 },
                 new Person
                 {
+                    Id = 3,
                     Type = PlayerType.Golfer,
                     IsGolfer = true,
                     Name = "Walter Sobchak",

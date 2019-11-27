@@ -152,7 +152,7 @@ namespace System.Linq.Expressions
             );
 
             // Convert expression
-            return Expression.Lambda<Func<T, bool>>(comparingExpression, param);
+            return comparingExpression == null ? null : Expression.Lambda<Func<T, bool>>(comparingExpression, param);
         }
 
         private static Expression DoesNotContain(MemberExpression memberField, Expression constant)
