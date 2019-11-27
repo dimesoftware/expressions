@@ -27,6 +27,9 @@ namespace Dime.Utilities.Expressions.Tests
         [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Sobchak", 1, false)]
         [DataRow("nl-BE", "Europe/Paris", "Name", "like", "Theodore Donald 'Donny' Kerabatsos", 0, false)]
 
+        [DataRow("nl-BE", "Europe/Paris", "Name", "nullorempty", "", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "Name", "notnullorempty", "",3, false)]
+
         // BOOLEAN tests
         [DataRow("nl-BE", "Europe/Paris", "IsGolfer", "like", "true", 1, false)]
         [DataRow("nl-BE", "Europe/Paris", "IsGolfer", "like", "false", 2, false)]

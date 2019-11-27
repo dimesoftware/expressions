@@ -146,6 +146,8 @@ namespace System.Linq.Expressions
                 swatch.Case(x => x == Operators.Gt, x => comparingExpression = GreaterThan(memberField, constant)),
                 swatch.Case(x => x == Operators.Lte, x => comparingExpression = LessThanOrEqual(memberField, constant)),
                 swatch.Case(x => x == Operators.Lt, x => comparingExpression = LessThan(memberField, constant)),
+                swatch.Case(x => x == Operators.IsNullOrEmpty, x => comparingExpression = IsNullOrEmpty(memberField)),
+                swatch.Case(x => x == Operators.IsNotNullOrEmpty, x => comparingExpression = IsNotNullOrEmpty(memberField)),
                 swatch.Default(x => comparingExpression = null)
             );
 
@@ -200,6 +202,16 @@ namespace System.Linq.Expressions
 
         private static Expression NotEquals(Expression memberField, Expression constant)
             => Expression.NotEqual(memberField, Expression.Convert(constant, memberField.Type));
+
+        private static Expression IsNotNullOrEmpty(MemberExpression memberField)
+            => memberField.HasOperator("IsNullOrEmpty")
+                ? Expression.Not(Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField))
+                : null;
+
+        private static Expression IsNullOrEmpty(MemberExpression memberField)
+            => memberField.HasOperator("IsNullOrEmpty")
+                ? Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField)
+                : null;
 
         #endregion Methods
     }

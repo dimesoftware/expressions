@@ -50,6 +50,12 @@ namespace System.Linq.Expressions
         Gt,
 
         [Description("lt")]
-        Lt
+        Lt,
+
+        [Description("nullorempty")]
+        IsNullOrEmpty,
+
+        [Description("notnullorempty")]
+        IsNotNullOrEmpty
     }
 }
