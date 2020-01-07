@@ -1,20 +1,54 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Dime.Expressions
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+[![Build Status](https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/Expressions-%20MAIN%20-%20CI?branchName=master)](https://dev.azure.com/dimenicsbe/Utilities/_build/latest?definitionId=81&branchName=master)
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## Introduction
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+Powerful expression builder.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## Getting Started
+
+- You must have Visual Studio 2019 Community or higher.
+- The dotnet cli is also highly recommended.
+
+## About this project
+
+Generates expressions on the fly
+
+## Build and Test
+
+- Run dotnet restore
+- Run dotnet build
+- Run dotnet test
+
+## Installation
+
+Use the package manager NuGet to install Dime.Expressions:
+
+- dotnet cli: `dotnet add package Dime.Expressions`
+- Package manager: `Install-Package Dime.Expressions`
+
+## Usage
+
+``` csharp
+using System.Linq.Expressions;
+
+public Expression<Func<MyClass, bool>> Get(string property, string operation, string value)
+{
+    ExpressionBuilder builder = new ExpressionBuilder();
+    builder.WithDateTimeParser(new DateTimeParser("Europe/London", new CultureInfo("en-GB")));
+    builder.WithDoubleParser(new DoubleParser("en-GB"));
+    builder.WithDecimalParser(new DecimalParser("en-GB"));
+
+    return ((IFilterExpressionBuilder)builder).GetExpression<MyClass>(property, operation, value);
+}
+```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+MIT

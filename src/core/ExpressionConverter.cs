@@ -127,87 +127,168 @@ namespace System.Linq.Expressions
             ConstantExpression constant = Expression.Constant(result);
 
             // Interpret the operator and convert into an expression
-            Expression comparingExpression = default(Expression);
-            Switcher<Operators> swatch = new Switcher<Operators>();
             Operators operatorType = operation.GetValueFromDescription<Operators>();
-            swatch.Switch(operatorType,
-                swatch.Case(x => x == Operators.IsSame, x => comparingExpression = Equals(memberField, constant)),
-                swatch.Case(x => x == Operators.Equals, x => comparingExpression = Equals(memberField, constant)),
-                swatch.Case(x => x == Operators.Eq, x => comparingExpression = Equals(memberField, constant)),
-                swatch.Case(x => x == Operators.Neq, x => comparingExpression = NotEquals(memberField, constant)),
-                swatch.Case(x => x == Operators.Like, x => comparingExpression = Like(memberField, constant)),
-                swatch.Case(x => x == Operators.Contains, x => comparingExpression = Like(memberField, constant)),
-                swatch.Case(x => x == Operators.DoesNotContain, x => comparingExpression = DoesNotContain(memberField, constant)),
-                swatch.Case(x => x == Operators.StartsWith, x => comparingExpression = StartsWith(memberField, constant)),
-                swatch.Case(x => x == Operators.EndsWith, x => comparingExpression = EndsWith(memberField, constant)),
-                swatch.Case(x => x == Operators.DoesNotStartWith, x => comparingExpression = DoesNotStartWith(memberField, constant)),
-                swatch.Case(x => x == Operators.DoesNotEndWith, x => comparingExpression = DoesNotEndWith(memberField, constant)),
-                swatch.Case(x => x == Operators.Gte, x => comparingExpression = GreaterThanOrEqual(memberField, constant)),
-                swatch.Case(x => x == Operators.Gt, x => comparingExpression = GreaterThan(memberField, constant)),
-                swatch.Case(x => x == Operators.Lte, x => comparingExpression = LessThanOrEqual(memberField, constant)),
-                swatch.Case(x => x == Operators.Lt, x => comparingExpression = LessThan(memberField, constant)),
-                swatch.Case(x => x == Operators.IsNullOrEmpty, x => comparingExpression = IsNullOrEmpty(memberField)),
-                swatch.Case(x => x == Operators.IsNotNullOrEmpty, x => comparingExpression = IsNotNullOrEmpty(memberField)),
-                swatch.Default(x => comparingExpression = null)
-            );
+            Expression comparingExpression = operatorType switch
+            {
+                Operators.IsSame => Equals(memberField, constant),
+                Operators.Equals => Equals(memberField, constant),
+                Operators.Eq => Equals(memberField, constant),
+                Operators.Neq => NotEquals(memberField, constant),
+                Operators.Like => Like(memberField, constant),
+                Operators.Contains => Like(memberField, constant),
+                Operators.DoesNotContain => DoesNotContain(memberField, constant),
+                Operators.StartsWith => StartsWith(memberField, constant),
+                Operators.EndsWith => EndsWith(memberField, constant),
+                Operators.DoesNotStartWith => DoesNotStartWith(memberField, constant),
+                Operators.DoesNotEndWith => DoesNotEndWith(memberField, constant),
+                Operators.Gte => GreaterThanOrEqual(memberField, constant),
+                Operators.Gt => GreaterThan(memberField, constant),
+                Operators.Lte => LessThanOrEqual(memberField, constant),
+                Operators.Lt => LessThan(memberField, constant),
+                Operators.IsNullOrEmpty => IsNullOrEmpty(memberField),
+                Operators.IsNotNullOrEmpty => IsNotNullOrEmpty(memberField),
+                _ => null
+            };
 
             // Convert expression
             return comparingExpression == null ? null : Expression.Lambda<Func<T, bool>>(comparingExpression, param);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression DoesNotContain(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
                 ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type)))
                 : null;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression Like(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
                 ? Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type))
                 : Equals(memberField, constant);
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression DoesNotStartWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("StartsWith")
                 ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.Type)))
                 : null;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression DoesNotEndWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("EndsWith")
                 ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.Type)))
                 : null;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression StartsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("StartsWith")
                 ? Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.Type))
                 : null;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression EndsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("EndsWith")
                 ? Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.Type))
                 : null;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression GreaterThanOrEqual(Expression memberField, Expression constant)
             => Expression.GreaterThanOrEqual(memberField, Expression.Convert(constant, memberField.Type));
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression GreaterThan(Expression memberField, Expression constant)
             => Expression.GreaterThan(memberField, Expression.Convert(constant, memberField.Type));
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression LessThan(Expression memberField, Expression constant)
             => Expression.LessThan(memberField, Expression.Convert(constant, memberField.Type));
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression LessThanOrEqual(Expression memberField, Expression constant)
             => Expression.LessThanOrEqual(memberField, Expression.Convert(constant, memberField.Type));
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression Equals(Expression memberField, Expression constant)
             => Expression.Equal(memberField, Expression.Convert(constant, memberField.Type));
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <param name="constant"></param>
+        /// <returns></returns>
         private static Expression NotEquals(Expression memberField, Expression constant)
             => Expression.NotEqual(memberField, Expression.Convert(constant, memberField.Type));
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <returns></returns>
         private static Expression IsNotNullOrEmpty(MemberExpression memberField)
             => memberField.HasOperator("IsNullOrEmpty")
                 ? Expression.Not(Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField))
                 : null;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="memberField"></param>
+        /// <returns></returns>
         private static Expression IsNullOrEmpty(MemberExpression memberField)
             => memberField.HasOperator("IsNullOrEmpty")
                 ? Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField)

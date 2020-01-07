@@ -32,7 +32,7 @@ namespace System.Linq.Expressions
                     return (T)field.GetValue(null);
             }
 
-            throw new ArgumentException(string.Format("Could not extract enum from this value: {0}", description), nameof(description));
+            throw new ArgumentException($"Could not extract enum from this value: {description}", nameof(description));
         }
     }
 }

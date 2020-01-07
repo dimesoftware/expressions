@@ -4,7 +4,7 @@ using System.Globalization;
 namespace Dime.Expressions.Tests.Mock
 {
     public class DoubleParser : IParser<double>, IParser<double?>
-    {  
+    {
         public DoubleParser(string culture)
         {
             Culture = culture;
@@ -31,7 +31,6 @@ namespace Dime.Expressions.Tests.Mock
 
             double parsedValue = ConvertFrom(value);
             return value.ToString() != "0" && parsedValue != 0;
-
         }
 
         double? IParser<double?>.ConvertFrom(object value)

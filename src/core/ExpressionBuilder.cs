@@ -66,7 +66,7 @@ namespace System.Linq.Expressions
             => ((ExpressionConverter)this).GetExpression<T>(fields, operation, value, ignoreCase);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TKey"></typeparam>
@@ -75,7 +75,7 @@ namespace System.Linq.Expressions
         /// <returns></returns>
         Expression<Func<T, TKey>> IFilterExpressionBuilder.CreateExpression<T, TKey>(string field, string complexProperty)
             => ((ExpressionConverter)this).CreateExpression<T, TKey>(field, complexProperty);
-       
+
         public static implicit operator ExpressionConverter(ExpressionBuilder builder)
             => new ExpressionConverter(builder.Descriptor);
     }
