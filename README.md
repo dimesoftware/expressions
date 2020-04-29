@@ -51,4 +51,4 @@ Please make sure to update tests as appropriate.
 
 ## License
 
-MIT
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)

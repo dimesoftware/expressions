@@ -2,15 +2,9 @@
 {
     internal static class PredicateBuilder
     {
-        internal static Expression<Func<T, bool>> True<T>()
-        {
-            return f => true;
-        }
+        internal static Expression<Func<T, bool>> True<T>() => f => true;
 
-        internal static Expression<Func<T, bool>> False<T>()
-        {
-            return f => false;
-        }
+        internal static Expression<Func<T, bool>> False<T>() => f => false;
 
         /// <summary>
         ///
