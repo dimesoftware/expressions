@@ -1,0 +1,12 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=15f00c96_002Dae94_002D4404_002Db315_002D4c126f8862ed/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::30EA7462-35E3-4CE4-811B-E870087A46CE::.NETCoreApp,Version=v2.0::Dime.Utilities.Expressions.Tests.ExpressionBuilderTests.ExpressionBuilder_GetExpression_NavigationProperty_Root_UseDefaultDisplayAttribute&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d694a067_002D5a70_002D4664_002Db053_002D6440cf399697/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ExpressionBuilder_GetExpression_NavigationProperty_Root_UseDefaultDisplayAttribute" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::30EA7462-35E3-4CE4-811B-E870087A46CE::.NETCoreApp,Version=v2.0::Dime.Utilities.Expressions.Tests.ExpressionBuilderTests.ExpressionBuilder_GetExpression_NavigationProperty_Root_UseDefaultDisplayAttribute&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	</wpf:ResourceDictionary>
