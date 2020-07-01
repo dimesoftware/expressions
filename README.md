@@ -1,6 +1,6 @@
 # Dime.Expressions
 
-![Build Status](https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/dimenics.dime-expressions?branchName=master)
+![Build Status](https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/dimenics.dime-expressions?branchName=master) ![Code coverage](https://img.shields.io/azure-devops/coverage/dimenicsbe/Utilities/147/master)
 
 ## Introduction
 
@@ -13,7 +13,7 @@ Powerful expression builder.
 
 ## About this project
 
-Generates expressions on the fly
+Generates expressions on the fly.
 
 ## Build and Test
 
@@ -33,14 +33,31 @@ Use the package manager NuGet to install Dime.Expressions:
 ``` csharp
 using System.Linq.Expressions;
 
-public Expression<Func<MyClass, bool>> Get(string property, string operation, string value)
+public class Customer
 {
+  public bool IsActive { get; set; }
+}
+
+public class CustomerFilter
+{
+  public static Expression<Func<Customer, bool>> CreateFilter(string property, string operation, string val)
+  {
     ExpressionBuilder builder = new ExpressionBuilder();
     builder.WithDateTimeParser(new DateTimeParser("Europe/London", new CultureInfo("en-GB")));
     builder.WithDoubleParser(new DoubleParser("en-GB"));
     builder.WithDecimalParser(new DecimalParser("en-GB"));
 
-    return ((IFilterExpressionBuilder)builder).GetExpression<MyClass>(property, operation, value);
+    return ((IFilterExpressionBuilder)builder).GetExpression<Customer>(property, operation, val);
+  }
+}
+
+public class CustomerApiController : ControllerBase
+{
+  public async Task<IEnumerable<Customer>> Get()
+  {
+     var filter = CustomerFilter.CreateFilter("IsActive", "eq", "true"); // x => x.IsActive == true;    
+     return await dbContext.Customers.Where(filter).ToListAsync();
+  }
 }
 ```
 
