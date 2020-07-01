@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Dime.Utilities.Expressions.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dime.Expressions.Tests
@@ -14,16 +13,12 @@ namespace Dime.Expressions.Tests
     [TestClass]
     public class PredicateUtilitiesTests
     {
-        #region Constructor
-
         /// <summary>
         ///
         /// </summary>
         public PredicateUtilitiesTests()
         {
         }
-
-        #endregion Constructor
 
         [TestMethod]
         [TestCategory("Filter")]

@@ -4,6 +4,9 @@
     &lt;TestId&gt;MSTest::30EA7462-35E3-4CE4-811B-E870087A46CE::.NETCoreApp,Version=v2.0::Dime.Utilities.Expressions.Tests.ExpressionBuilderTests.ExpressionBuilder_GetExpression_NavigationProperty_Root_UseDefaultDisplayAttribute&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b72bfc3e_002D3f9b_002D42fc_002Dad75_002Df143a4df5694/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ExpressionChain_And_ArgumentNull_ThrowsArgumentNullException" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d694a067_002D5a70_002D4664_002Db053_002D6440cf399697/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ExpressionBuilder_GetExpression_NavigationProperty_Root_UseDefaultDisplayAttribute" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;MSTest::30EA7462-35E3-4CE4-811B-E870087A46CE::.NETCoreApp,Version=v2.0::Dime.Utilities.Expressions.Tests.ExpressionBuilderTests.ExpressionBuilder_GetExpression_NavigationProperty_Root_UseDefaultDisplayAttribute&lt;/TestId&gt;&#xD;

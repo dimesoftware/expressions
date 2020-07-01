@@ -9,8 +9,6 @@ namespace Dime.Expressions.Tests
     /// </summary>
     public class DateTimeParser : IParser<DateTime>, IParser<DateTime?>
     {
-        #region Constructor
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTimeParser"/> class
         /// </summary>
@@ -22,16 +20,8 @@ namespace Dime.Expressions.Tests
             Culture = culture;
         }
 
-        #endregion Constructor
-
-        #region Properties
-
         private string TimeZone { get; }
         public CultureInfo Culture { get; set; }
-
-        #endregion Properties
-
-        #region Methods
 
         /// <summary>
         /// Validates whether the value is compatible
@@ -70,7 +60,5 @@ namespace Dime.Expressions.Tests
         /// <returns>An instance of <see cref="DateTime"/></returns>
         public DateTime ConvertFrom(object value)
             => DateTime.Parse(value.ToString(), Culture);
-
-        #endregion Methods
     }
 }

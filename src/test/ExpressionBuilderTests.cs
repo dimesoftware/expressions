@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using Dime.Expressions.Tests;
 using Dime.Expressions.Tests.Mock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Dime.Utilities.Expressions.Tests
+namespace Dime.Expressions.Tests
 {
     [TestClass]
     public class ExpressionBuilderTests

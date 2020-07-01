@@ -9,8 +9,6 @@ namespace System.Linq.Expressions
     /// </summary>
     public class ExpressionConverter
     {
-        #region Constructor
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpressionConverter"/> class
         /// </summary>
@@ -20,15 +18,7 @@ namespace System.Linq.Expressions
             Descriptor = descriptor;
         }
 
-        #endregion Constructor
-
-        #region Properties
-
         private ParserDescriptor Descriptor { get; }
-
-        #endregion Properties
-
-        #region Methods
 
         /// <summary>
         /// Creates an expression for the <paramref name="field"/> parameter (scalar property) on type <typeparamref name="T"/>
@@ -293,7 +283,5 @@ namespace System.Linq.Expressions
             => memberField.HasOperator("IsNullOrEmpty")
                 ? Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField)
                 : null;
-
-        #endregion Methods
     }
 }

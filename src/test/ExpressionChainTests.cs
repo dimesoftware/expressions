@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Dime.Utilities.Expressions.Tests
+namespace Dime.Expressions.Tests
 {
     /// <summary>
     /// Tests ExpressionChain class.
@@ -13,8 +13,6 @@ namespace Dime.Utilities.Expressions.Tests
     [TestClass]
     public class ExpressionChainTests
     {
-        #region Constructor
-
         /// <summary>
         ///
         /// </summary>
@@ -22,15 +20,13 @@ namespace Dime.Utilities.Expressions.Tests
         {
         }
 
-        #endregion Constructor
-
         [TestMethod]
         [TestCategory("Filter")]
         public void ExpressionChain_And_ArgumentNull_ThrowsArgumentNullException()
         {
             Expression<Func<Person, bool>>[] includes = null;
             ArgumentNullException ex = Assert.ThrowsException<ArgumentNullException>(() => ExpressionChain.And(includes));
-            Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: expressions");
+            Assert.AreEqual(ex.Message, "Value cannot be null. (Parameter 'expressions')");
         }
 
         [TestMethod]
@@ -131,7 +127,7 @@ namespace Dime.Utilities.Expressions.Tests
         {
             Expression<Func<Person, bool>>[] includes = null;
             ArgumentNullException ex = Assert.ThrowsException<ArgumentNullException>(() => ExpressionChain.Or(includes));
-            Assert.AreEqual(ex.Message, "Value cannot be null.\r\nParameter name: expressions");
+            Assert.AreEqual(ex.Message, "Value cannot be null. (Parameter 'expressions')");
         }
 
         [TestMethod]

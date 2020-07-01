@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.Linq.Expressions
@@ -7,6 +8,8 @@ namespace System.Linq.Expressions
     /// Represents a generator of expressions
     /// </summary>
     /// <typeparam name="T">The type for which to create the filters</typeparam>
+    [ExcludeFromCodeCoverage]
+    [Obsolete]
     public class ExpressionBuilder<T> : IOrderExpressionBuilder<T>
     {
         /// <summary>

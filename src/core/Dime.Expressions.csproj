@@ -9,10 +9,10 @@
 
   <PropertyGroup>
     <Description>Useful functions for building dynamic expressions</Description>
-    <AssemblyTitle>Dime.Utilities.Expressions</AssemblyTitle>
+    <AssemblyTitle>Dime.Expressions</AssemblyTitle>
     <Authors>Dimenics</Authors>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-    <AssemblyName>Dime.Linq.Expressions</AssemblyName>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <AssemblyName>Dime.Expressions</AssemblyName>
     <PackageId>Dime.Expressions</PackageId>
     <PackageIconUrl>http://dimenuget.azurewebsites.net/Images/dimenuget.png</PackageIconUrl>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -25,7 +25,7 @@
     <FileVersion>1.0.0.0</FileVersion>
     <IncludeSource>True</IncludeSource>
     <IncludeSymbols>True</IncludeSymbols>
-    <RootNamespace>Dime.Linq.Expressions</RootNamespace>
+    <RootNamespace>Dime.Expressions</RootNamespace>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright © 2020</Copyright>

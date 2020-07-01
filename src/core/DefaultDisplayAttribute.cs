@@ -7,8 +7,6 @@
     [AttributeUsage(AttributeTargets.Class)]
     public class DefaultDisplayAttribute : Attribute
     {
-        #region Constructor
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultDisplayAttribute"/> class
         /// </summary>
@@ -18,15 +16,9 @@
             Name = name;
         }
 
-        #endregion Constructor
-
-        #region Properties
-
         /// <summary>
         /// Gets or sets the name
         /// </summary>
         public string Name { get; set; }
-
-        #endregion Properties
     }
 }

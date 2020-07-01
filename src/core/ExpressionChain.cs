@@ -35,7 +35,7 @@
             if (expressions == default(Expression<Func<T, bool>>[]))
                 throw new ArgumentNullException(nameof(expressions));
 
-            Expression<Func<T, bool>> expression = default(Expression<Func<T, bool>>);
+            Expression<Func<T, bool>> expression = default;
 
             int maxLength = expressions.Length;
             if (expressions != null && expressions.Length > 1)
@@ -90,7 +90,7 @@
             if (expressions.Length <= 1)
                 return expressions.ElementAt(0);
 
-            Expression<Func<T, bool>> expression = default(Expression<Func<T, bool>>);
+            Expression<Func<T, bool>> expression = default;
 
             // Make a count how many filters need to be concatenated
             int maxLength = expressions.Length;

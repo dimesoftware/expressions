@@ -1,6 +1,6 @@
 # Dime.Expressions
 
-[![Build Status](https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/Expressions-%20MAIN%20-%20CI?branchName=master)](https://dev.azure.com/dimenicsbe/Utilities/_build/latest?definitionId=81&branchName=master)
+![Build Status](https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/dimenics.dime-expressions?branchName=master)
 
 ## Introduction
 
@@ -46,8 +46,9 @@ public Expression<Func<MyClass, bool>> Get(string property, string operation, st
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
+
+Pull requests are welcome. Please check out the contribution and code of conduct guidelines.
 
 ## License
 

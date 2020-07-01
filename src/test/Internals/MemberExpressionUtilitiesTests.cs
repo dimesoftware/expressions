@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using Dime.Expressions.Tests.Mock;
-using Dime.Utilities.Expressions.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dime.Expressions.Tests.Internals

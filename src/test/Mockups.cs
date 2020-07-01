@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Dime.Utilities.Expressions.Tests
+namespace Dime.Expressions.Tests
 {
     public class Person
     {
