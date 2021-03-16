@@ -8,7 +8,7 @@ namespace System.Linq.Expressions
     /// </summary>
     public class ExpressionBuilder : IFilterExpressionBuilder
     {
-        private ParserDescriptor Descriptor { get; } = new ParserDescriptor();
+        private ParserDescriptor Descriptor { get; } = new();
 
         /// <summary>
         /// Fluent API for adding a parser for the <see cref="DateTime"/> struct
@@ -77,6 +77,6 @@ namespace System.Linq.Expressions
             => ((ExpressionConverter)this).CreateExpression<T, TKey>(field, complexProperty);
 
         public static implicit operator ExpressionConverter(ExpressionBuilder builder)
-            => new ExpressionConverter(builder.Descriptor);
+            => new(builder.Descriptor);
     }
 }

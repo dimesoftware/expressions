@@ -1,6 +1,14 @@
-# Dime.Expressions
+<p align="center">
+<img src="./assets/logo.svg" height="250px" />
+</p>
 
-![Build Status](https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/dimenics.dime-expressions?branchName=master) ![Code coverage](https://img.shields.io/azure-devops/coverage/dimenicsbe/Utilities/147/master)
+
+
+<h1 align="center">Expressions Builder</h1> 
+
+<div align="center">
+<img src="https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/dimenics.dime-expressions?branchName=master" /> <img src="https://img.shields.io/azure-devops/coverage/dimenicsbe/Utilities/147/master" /> <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square"/> <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" />
+</div>
 
 ## Introduction
 
@@ -63,10 +71,13 @@ public class CustomerApiController : ControllerBase
 
 ## Contributing
 
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
+We welcome contributions. Please check out the contribution and code of conduct guidelines first.
 
-Pull requests are welcome. Please check out the contribution and code of conduct guidelines.
+To contribute:
 
-## License
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/mynewfeature`)
+3. Commit your changes (`git commit -m 'Add mynewfeature'`)
+4. Push to the branch (`git push origin feature/mynewfeature`)
+5. Open a pull request
 
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)

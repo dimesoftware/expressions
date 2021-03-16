@@ -1,38 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-  </PropertyGroup>
-
   <PropertyGroup>
-    <Description>Useful functions for building dynamic expressions</Description>
-    <AssemblyTitle>Dime.Expressions</AssemblyTitle>
-    <Authors>Dimenics</Authors>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>net5.0;netstandard2.1;netstandard2.0;net461</TargetFrameworks>
     <AssemblyName>Dime.Expressions</AssemblyName>
-    <PackageId>Dime.Expressions</PackageId>
-    <PackageIconUrl>http://dimenuget.azurewebsites.net/Images/dimenuget.png</PackageIconUrl>
+    <LangVersion>latest</LangVersion>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>1.0.0-alpha.1</Version>
+    <Description>Useful functions for building dynamic expressions</Description>
+    <AssemblyTitle>Dime.Expressions</AssemblyTitle>
+    <Authors>Dimenics</Authors>
+    <RootNamespace>Dime.Expressions</RootNamespace>
+    <Copyright>Copyright © 2021</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/dimenics/ds-sdk</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>1.0.0-alpha.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Dime.Expressions</PackageId>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <IncludeSource>True</IncludeSource>
     <IncludeSymbols>True</IncludeSymbols>
-    <RootNamespace>Dime.Expressions</RootNamespace>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright © 2020</Copyright>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://dev.azure.com/dimenicsbe/Utilities/_git/Dime.Expressions</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/dimenics/ds-sdk</PackageProjectUrl>
     <PackageTags>Expressions</PackageTags>
-    <LangVersion>latest</LangVersion>
+    <PackageIconUrl>https://github.com/dimenics/dimenics/blob/master/assets/dimenicslogo.png?raw=true</PackageIconUrl>
+    <PackageTags>Dime;SDK;REST</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>
