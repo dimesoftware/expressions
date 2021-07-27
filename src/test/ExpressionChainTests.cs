@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dime.Expressions.Tests
 {
@@ -13,13 +13,6 @@ namespace Dime.Expressions.Tests
     [TestClass]
     public class ExpressionChainTests
     {
-        /// <summary>
-        ///
-        /// </summary>
-        public ExpressionChainTests()
-        {
-        }
-
         [TestMethod]
         [TestCategory("Filter")]
         public void ExpressionChain_And_ArgumentNull_ThrowsArgumentNullException()
@@ -49,10 +42,10 @@ namespace Dime.Expressions.Tests
 
             IQueryable<Person> mockups = new List<Person>
             {
-                new Person { Id = 0, Category = "CATEGORY 1" },
-                new Person { Id = 1, Category = "CATEGORY 1" },
-                new Person { Id = 2, Category = "CATEGORY 1" },
-                new Person { Id = 3, Category = "CATEGORY 2" },
+                new() { Id = 0, Category = "CATEGORY 1" },
+                new() { Id = 1, Category = "CATEGORY 1" },
+                new() { Id = 2, Category = "CATEGORY 1" },
+                new() { Id = 3, Category = "CATEGORY 2" },
             }.AsQueryable();
 
             Assert.IsTrue(mockups.Where(mergedExpression).Count() == 2);
@@ -65,14 +58,14 @@ namespace Dime.Expressions.Tests
             Expression<Func<Person, bool>> f1 = x => x.Id > 0;
             Expression<Func<Person, bool>> f2 = x => x.Category == "CATEGORY 1";
             Expression<Func<Person, bool>> f3 = x => x.Name == "Dude";
-            Expression<Func<Person, bool>> mergedExpression = ExpressionChain.And(f1, f2, f3);
+            Expression<Func<Person, bool>> mergedExpression = f1.And(f2).And(f3);
 
             IQueryable<Person> mockups = new List<Person>
             {
-                new Person { Id = 0, Category = "CATEGORY 1", Name = "Duderino" },
-                new Person { Id = 1, Category = "CATEGORY 1", Name = "Dude" },
-                new Person { Id = 2, Category = "CATEGORY 1", Name = "Dude" },
-                new Person { Id = 3, Category = "CATEGORY 2", Name = "Dude" },
+                new() { Id = 0, Category = "CATEGORY 1", Name = "Duderino" },
+                new() { Id = 1, Category = "CATEGORY 1", Name = "Dude" },
+                new() { Id = 2, Category = "CATEGORY 1", Name = "Dude" },
+                new() { Id = 3, Category = "CATEGORY 2", Name = "Dude" },
             }.AsQueryable();
 
             Assert.IsTrue(mockups.Where(mergedExpression).Count() == 2);
@@ -86,14 +79,14 @@ namespace Dime.Expressions.Tests
             Expression<Func<Person, bool>> f2 = x => x.Category == "CATEGORY 1";
             Expression<Func<Person, bool>> f3 = x => x.Name == "Dude";
             Expression<Func<Person, bool>> f4 = x => x.City == "LA";
-            Expression<Func<Person, bool>> mergedExpression = ExpressionChain.And(f1, f2, f3, f4);
+            Expression<Func<Person, bool>> mergedExpression = f1.And(f2).And(f3).And(f4);
 
             IQueryable<Person> mockups = new List<Person>
             {
-                new Person { Id = 0, Category = "CATEGORY 1", Name = "Duderino", City = "LA" }, // Miss: Id <= 0
-                new Person { Id = 1, Category = "CATEGORY 1", Name = "Dude", City = "LA" }, // Hit
-                new Person { Id = 2, Category = "CATEGORY 1", Name = "Dude", City = "NY" }, // Miss:City != LA
-                new Person { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA" }, // Miss: Category
+                new() { Id = 0, Category = "CATEGORY 1", Name = "Duderino", City = "LA" }, // Miss: Id <= 0
+                new() { Id = 1, Category = "CATEGORY 1", Name = "Dude", City = "LA" }, // Hit
+                new() { Id = 2, Category = "CATEGORY 1", Name = "Dude", City = "NY" }, // Miss:City != LA
+                new() { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA" }, // Miss: Category
             }.AsQueryable();
 
             Assert.IsTrue(mockups.Where(mergedExpression).Count() == 1);
@@ -108,14 +101,14 @@ namespace Dime.Expressions.Tests
             Expression<Func<Person, bool>> f3 = x => x.Name == "Dude";
             Expression<Func<Person, bool>> f4 = x => x.City == "LA";
             Expression<Func<Person, bool>> f5 = x => x.IsGolfer == true;
-            Expression<Func<Person, bool>> mergedExpression = ExpressionChain.And(f1, f2, f3, f4, f5);
+            Expression<Func<Person, bool>> mergedExpression = f1.And(f2).And(f3).And(f4).And(f5);
 
             IQueryable<Person> mockups = new List<Person>
             {
-                new Person { Id = 0, Category = "CATEGORY 1", Name = "Duderino", City = "NY", IsGolfer = true },
-                new Person { Id = 1, Category = "CATEGORY 1", Name = "Dude", City = "LA", IsGolfer = true },
-                new Person { Id = 2, Category = "CATEGORY 1", Name = "Dude", City = "LA", IsGolfer = true },
-                new Person { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA", IsGolfer = true },
+                new() { Id = 0, Category = "CATEGORY 1", Name = "Duderino", City = "NY", IsGolfer = true },
+                new() { Id = 1, Category = "CATEGORY 1", Name = "Dude", City = "LA", IsGolfer = true },
+                new() { Id = 2, Category = "CATEGORY 1", Name = "Dude", City = "LA", IsGolfer = true },
+                new() { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA", IsGolfer = true },
             }.AsQueryable();
 
             Assert.IsTrue(mockups.Where(mergedExpression).Count() == 2);
@@ -150,10 +143,10 @@ namespace Dime.Expressions.Tests
 
             IQueryable<Person> mockups = new List<Person>
             {
-                new Person { Id = 0, Category = "CATEGORY 1" },
-                new Person { Id = 1, Category = "CATEGORY 1" },
-                new Person { Id = 2, Category = "CATEGORY 1" },
-                new Person { Id = 3, Category = "CATEGORY 2" },
+                new() { Id = 0, Category = "CATEGORY 1" },
+                new() { Id = 1, Category = "CATEGORY 1" },
+                new() { Id = 2, Category = "CATEGORY 1" },
+                new() { Id = 3, Category = "CATEGORY 2" },
             }.AsQueryable();
 
             Assert.IsTrue(mockups.Where(mergedExpression).Count() == 4);
@@ -166,14 +159,14 @@ namespace Dime.Expressions.Tests
             Expression<Func<Person, bool>> f1 = x => x.Id > 0;
             Expression<Func<Person, bool>> f2 = x => x.Category == "CATEGORY 1";
             Expression<Func<Person, bool>> f3 = x => x.Name == "Dude";
-            Expression<Func<Person, bool>> mergedExpression = ExpressionChain.Or(f1, f2, f3);
+            Expression<Func<Person, bool>> mergedExpression = f1.Or(f2).Or(f3);
 
             IQueryable<Person> mockups = new List<Person>
             {
-                new Person { Id = 0, Category = "CATEGORY 1", Name = "Duderino" },
-                new Person { Id = 1, Category = "CATEGORY 1", Name = "Dude" },
-                new Person { Id = 2, Category = "CATEGORY 1", Name = "Dude" },
-                new Person { Id = 3, Category = "CATEGORY 2", Name = "Dude" },
+                new() { Id = 0, Category = "CATEGORY 1", Name = "Duderino" },
+                new() { Id = 1, Category = "CATEGORY 1", Name = "Dude" },
+                new() { Id = 2, Category = "CATEGORY 1", Name = "Dude" },
+                new() { Id = 3, Category = "CATEGORY 2", Name = "Dude" },
             }.AsQueryable();
 
             Assert.IsTrue(mockups.Where(mergedExpression).Count() == 4);
@@ -187,14 +180,14 @@ namespace Dime.Expressions.Tests
             Expression<Func<Person, bool>> f2 = x => x.Category == "CATEGORY 1";
             Expression<Func<Person, bool>> f3 = x => x.Name == "Dude";
             Expression<Func<Person, bool>> f4 = x => x.City == "LA";
-            Expression<Func<Person, bool>> mergedExpression = ExpressionChain.Or(f1, f2, f3, f4);
+            Expression<Func<Person, bool>> mergedExpression = f1.Or(f2).Or(f3).Or(f4);
 
             IQueryable<Person> mockups = new List<Person>
             {
-                new Person { Id = 0, Category = "CATEGORY 1", Name = "Duderino", City = "NY" },
-                new Person { Id = 1, Category = "CATEGORY 1", Name = "Dude", City = "LA" },
-                new Person { Id = 2, Category = "CATEGORY 1", Name = "Dude", City = "LA" },
-                new Person { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA" },
+                new() { Id = 0, Category = "CATEGORY 1", Name = "Duderino", City = "NY" },
+                new() { Id = 1, Category = "CATEGORY 1", Name = "Dude", City = "LA" },
+                new() { Id = 2, Category = "CATEGORY 1", Name = "Dude", City = "LA" },
+                new() { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA" },
             }.AsQueryable();
 
             Assert.IsTrue(mockups.Where(mergedExpression).Count() == 4);
@@ -209,14 +202,14 @@ namespace Dime.Expressions.Tests
             Expression<Func<Person, bool>> f3 = x => x.Name == "Dude";
             Expression<Func<Person, bool>> f4 = x => x.City == "LA";
             Expression<Func<Person, bool>> f5 = x => x.IsGolfer == true;
-            Expression<Func<Person, bool>> mergedExpression = ExpressionChain.Or(f1, f2, f3, f4, f5);
+            Expression<Func<Person, bool>> mergedExpression = f1.Or(f2).Or(f3).Or(f4).Or(f5);
 
             IQueryable<Person> mockups = new List<Person>
             {
-                new Person { Id = 0, Category = "CATEGORY 1", Name = "Duderino", City = "NY", IsGolfer = true },
-                new Person { Id = 1, Category = "CATEGORY 1", Name = "Dude", City = "LA", IsGolfer = true },
-                new Person { Id = 2, Category = "CATEGORY 1", Name = "Dude", City = "LA", IsGolfer = true },
-                new Person { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA", IsGolfer = true },
+                new() { Id = 0, Category = "CATEGORY 1", Name = "Duderino", City = "NY", IsGolfer = true },
+                new() { Id = 1, Category = "CATEGORY 1", Name = "Dude", City = "LA", IsGolfer = true },
+                new() { Id = 2, Category = "CATEGORY 1", Name = "Dude", City = "LA", IsGolfer = true },
+                new() { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA", IsGolfer = true },
             }.AsQueryable();
 
             Assert.IsTrue(mockups.Where(mergedExpression).Count() == 4);

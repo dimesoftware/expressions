@@ -2,9 +2,7 @@
 <img src="./assets/logo.svg" height="250px" />
 </p>
 
-
-
-<h1 align="center">Expressions Builder</h1> 
+<h1 align="center">.NET Expressions Builder</h1>
 
 <div align="center">
 <img src="https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/dimenics.dime-expressions?branchName=master" /> <img src="https://img.shields.io/azure-devops/coverage/dimenicsbe/Utilities/147/master" /> <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square"/> <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" />
@@ -12,7 +10,7 @@
 
 ## Introduction
 
-Powerful expression builder.
+Powerful filter builder that converts string-based queries to expressions `Expression<Func<T,bool>>` that you can execute against your code, collections, Entity Framework, and so much more.
 
 ## Getting Started
 
@@ -38,7 +36,7 @@ Use the package manager NuGet to install Dime.Expressions:
 
 ## Usage
 
-``` csharp
+```csharp
 using System.Linq.Expressions;
 
 public class Customer
@@ -61,9 +59,15 @@ public class CustomerFilter
 
 public class CustomerApiController : ControllerBase
 {
-  public async Task<IEnumerable<Customer>> Get()
+  /// <summary>
+  /// Example data:
+  /// property = "IsActive"
+  /// operatorKey = "eq"
+  /// value = "true"
+  /// </summary>
+  public async Task<IEnumerable<Customer>> Get(string property, string operatorKey, string value)
   {
-     var filter = CustomerFilter.CreateFilter("IsActive", "eq", "true"); // x => x.IsActive == true;    
+     var filter = CustomerFilter.CreateFilter(property, operatorKey, value); // x => x.IsActive == true;
      return await dbContext.Customers.Where(filter).ToListAsync();
   }
 }
@@ -80,4 +84,3 @@ To contribute:
 3. Commit your changes (`git commit -m 'Add mynewfeature'`)
 4. Push to the branch (`git push origin feature/mynewfeature`)
 5. Open a pull request
-

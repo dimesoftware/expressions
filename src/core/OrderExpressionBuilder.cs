@@ -41,7 +41,7 @@ namespace System.Linq.Expressions
             // Get type of root object
             Type type = typeof(T);
             ParameterExpression parentParameterExpression = Expression.Parameter(type, "x");
-            MemberExpression memberExpression = default(MemberExpression);
+            MemberExpression memberExpression = default;
 
             // Loop through each node
             IOrderedEnumerable<KeyValuePair<int, string>> orderedList = dataIndices.OrderBy(x => x.Key);

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dime.Expressions.Tests
 {
@@ -13,20 +13,13 @@ namespace Dime.Expressions.Tests
     [TestClass]
     public class PredicateUtilitiesTests
     {
-        /// <summary>
-        ///
-        /// </summary>
-        public PredicateUtilitiesTests()
-        {
-        }
-
         [TestMethod]
         [TestCategory("Filter")]
         public void PredicateUtilities_And()
         {
-            List<Person> persons = new List<Person>
+            List<Person> persons = new()
             {
-                new Person { Type = PlayerType.Golfer, Category = "Category 1"},
+                new Person { Type = PlayerType.Golfer, Category = "Category 1" },
                 new Person { Type = PlayerType.Golfer, Category = "Category 2" },
                 new Person { Type = PlayerType.Golfer, Category = "Category 1" },
                 new Person { Type = PlayerType.Bowler, Category = "Category 1" },
@@ -44,9 +37,9 @@ namespace Dime.Expressions.Tests
         [TestCategory("Filter")]
         public void PredicateUtilities_Or()
         {
-            List<Person> persons = new List<Person>
+            List<Person> persons = new()
             {
-                new Person { Type = PlayerType.Golfer, Category = "Category 1"},
+                new Person { Type = PlayerType.Golfer, Category = "Category 1" },
                 new Person { Type = PlayerType.Golfer, Category = "Category 2" },
                 new Person { Type = PlayerType.Golfer, Category = "Category 1" },
                 new Person { Type = PlayerType.Bowler, Category = "Category 1" },
