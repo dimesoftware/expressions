@@ -8,7 +8,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <Description>Useful functions for building dynamic expressions</Description>
     <AssemblyTitle>Dime.Expressions</AssemblyTitle>
-    <Authors>Dimenics</Authors>
+    <Authors>Dime Software</Authors>
     <RootNamespace>Dime.Expressions</RootNamespace>
     <Copyright>Copyright © 2021</Copyright>
     <RepositoryType>git</RepositoryType>
@@ -30,7 +30,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <PackageProjectUrl>https://github.com/dimenics/ds-sdk</PackageProjectUrl>
     <PackageTags>Expressions</PackageTags>
-    <PackageIconUrl>https://github.com/dimenics/dimenics/blob/master/assets/dimenicslogo.png?raw=true</PackageIconUrl>
+    <PackageIconUrl>https://cdn.dime-software.com/dime-software/logo-shape.png</PackageIconUrl>
     <PackageTags>Dime;SDK;REST</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

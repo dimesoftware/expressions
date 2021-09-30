@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Dime.Utilities.Expressions Tests</Description>
     <AssemblyTitle>Dime.Utilities.Expressions Tests</AssemblyTitle>
-    <Authors>Dimenics</Authors>
+    <Authors>Dime Software</Authors>
     <TargetFrameworks>net5.0</TargetFrameworks>
     <AssemblyName>Dime.Expressions.Tests</AssemblyName>
     <PackageId>Dime.Utilities.Expressions.Tests</PackageId>
