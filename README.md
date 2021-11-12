@@ -5,7 +5,7 @@
 <h1 align="center">.NET Expressions Builder</h1>
 
 <div align="center">
-<img src="https://dev.azure.com/dimenicsbe/Utilities/_apis/build/status/dimenics.dime-expressions?branchName=master" /> <img src="https://img.shields.io/azure-devops/coverage/dimenicsbe/Utilities/147/master" /> <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square"/> <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" />
+<img src="https://dev.azure.com/dimesoftware/Utilities/_apis/build/status/dimenics.dime-expressions?branchName=master" /> <img src="https://img.shields.io/azure-devops/coverage/dimesoftware/Utilities/147/master" /> <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square"/> <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" />
 </div>
 
 ## Introduction
