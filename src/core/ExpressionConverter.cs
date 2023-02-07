@@ -65,11 +65,11 @@ namespace System.Linq.Expressions
         }
 
         /// <summary>
-        ///
+        /// Creates an expression for the <paramref name="field"/> parameter (navigation property) on type <typeparamref name="T"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TKey"></typeparam>
-        /// <param name="field">The path to the property on type <typeparamref name="T"/></param>
+        /// <param name="field"></param>
         /// <param name="complexProperty"></param>
         /// <returns></returns>
         public Expression<Func<T, TKey>> CreateExpression<T, TKey>(string field, string complexProperty)
@@ -87,15 +87,6 @@ namespace System.Linq.Expressions
             return Expression.Lambda<Func<T, TKey>>(expression, initialExpression);
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="param">The root expression</param>
-        /// <param name="memberField">The expression that leads to the property</param>
-        /// <param name="operation">The operator defined as a string</param>
-        /// <param name="value">The value to compare the field with</param>
-        /// <returns></returns>
         private Expression<Func<T, bool>> CreateExpression<T>(
             ParameterExpression param,
             MemberExpression memberField,
@@ -143,142 +134,60 @@ namespace System.Linq.Expressions
             // Convert expression
             return comparingExpression == null ? null : Expression.Lambda<Func<T, bool>>(comparingExpression, param);
         }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+       
         private static Expression DoesNotContain(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
                 ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type)))
                 : null;
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+       
         private static Expression Like(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
                 ? Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type))
                 : Equals(memberField, constant);
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+    
         private static Expression DoesNotStartWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("StartsWith")
                 ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.Type)))
                 : null;
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+      
         private static Expression DoesNotEndWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("EndsWith")
                 ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.Type)))
                 : null;
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+     
         private static Expression StartsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("StartsWith")
                 ? Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.Type))
                 : null;
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+       
         private static Expression EndsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("EndsWith")
                 ? Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.Type))
                 : null;
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+    
         private static Expression GreaterThanOrEqual(Expression memberField, Expression constant)
             => Expression.GreaterThanOrEqual(memberField, Expression.Convert(constant, memberField.Type));
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+     
         private static Expression GreaterThan(Expression memberField, Expression constant)
             => Expression.GreaterThan(memberField, Expression.Convert(constant, memberField.Type));
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+      
         private static Expression LessThan(Expression memberField, Expression constant)
             => Expression.LessThan(memberField, Expression.Convert(constant, memberField.Type));
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+      
         private static Expression LessThanOrEqual(Expression memberField, Expression constant)
             => Expression.LessThanOrEqual(memberField, Expression.Convert(constant, memberField.Type));
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+       
         private static Expression Equals(Expression memberField, Expression constant)
             => Expression.Equal(memberField, Expression.Convert(constant, memberField.Type));
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="constant"></param>
-        /// <returns></returns>
+       
         private static Expression NotEquals(Expression memberField, Expression constant)
             => Expression.NotEqual(memberField, Expression.Convert(constant, memberField.Type));
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <returns></returns>
+      
         private static Expression IsNotNullOrEmpty(MemberExpression memberField)
             => memberField.HasOperator("IsNullOrEmpty")
                 ? Expression.Not(Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField))
                 : null;
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <returns></returns>
+       
         private static Expression IsNullOrEmpty(MemberExpression memberField)
             => memberField.HasOperator("IsNullOrEmpty")
                 ? Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField)

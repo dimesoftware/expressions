@@ -2,9 +2,6 @@
 
 namespace System.Linq.Expressions
 {
-    /// <summary>
-    /// Utilities that extend the <see cref="MemberExpression"/> class
-    /// </summary>
     internal static class MemberExpressionUtilities
     {
         /// <summary>
@@ -34,21 +31,9 @@ namespace System.Linq.Expressions
                 : null;
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="operation"></param>
-        /// <returns></returns>
         internal static bool HasOperator(this MemberExpression memberField, string operation)
             => memberField.Type.GetMethod(operation, new[] { memberField.Type }) != null;
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="memberField"></param>
-        /// <param name="operation"></param>
-        /// <returns></returns>
         internal static MethodInfo GetOperator(this MemberExpression memberField, string operation)
             => memberField.Type.GetMethod(operation, new[] { memberField.Type });
     }

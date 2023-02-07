@@ -1,38 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net5.0;net461</TargetFrameworks>
-    <AssemblyName>Dime.Expressions</AssemblyName>
-    <LangVersion>latest</LangVersion>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Description>Useful functions for building dynamic expressions</Description>
-    <AssemblyTitle>Dime.Expressions</AssemblyTitle>
-    <Authors>Dime Software</Authors>
-    <RootNamespace>Dime.Expressions</RootNamespace>
-    <Copyright>Copyright © 2021</Copyright>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/dimenics/ds-sdk</RepositoryUrl>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net7.0;net461</TargetFrameworks>
+		<AssemblyName>Dime.Expressions</AssemblyName>
+		<LangVersion>latest</LangVersion>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Description>Useful functions for building dynamic expressions</Description>
+		<AssemblyTitle>Dime.Expressions</AssemblyTitle>
+		<Authors>Dime Software</Authors>
+		<RootNamespace>Dime.Expressions</RootNamespace>
+		<Copyright>Copyright © 2023</Copyright>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/dimesoftware/expressions</RepositoryUrl>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <Version>1.0.0-alpha.2</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<Version>1.0.0-alpha.3</Version>
+		<NeutralLanguage>en</NeutralLanguage>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <PackageId>Dime.Expressions</PackageId>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <IncludeSource>True</IncludeSource>
-    <IncludeSymbols>True</IncludeSymbols>
-    <PackageProjectUrl>https://github.com/dimenics/ds-sdk</PackageProjectUrl>
-    <PackageTags>Expressions</PackageTags>
-    <PackageIconUrl>https://cdn.dime-software.com/dime-software/logo-shape.png</PackageIconUrl>
-    <PackageTags>Dime;SDK;REST</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-  </PropertyGroup>
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>Dime.Expressions</PackageId>
+		<PackageReleaseNotes></PackageReleaseNotes>
+		<IncludeSource>True</IncludeSource>
+		<IncludeSymbols>True</IncludeSymbols>
+		<PackageProjectUrl>https://github.com/dimesoftware/expressions</PackageProjectUrl>
+		<PackageTags>Expressions</PackageTags>
+		<PackageIconUrl>https://cdn.dime-software.com/dime-software/logo-shape.png</PackageIconUrl>
+		<PackageTags>Expressions;LINQ</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>Dime.Expressions.Tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 
 </Project>
