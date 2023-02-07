@@ -1,10 +1,10 @@
-﻿using Dime.Expressions.Tests.Mock;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using Dime.Expressions.Tests.Mock;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dime.Expressions.Tests.Internals
 {
