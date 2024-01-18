@@ -42,5 +42,11 @@ namespace System.Linq.Expressions
             Type typeIfNullable = Nullable.GetUnderlyingType(memberField.Type);
             return typeIfNullable ?? memberField.Type;
         }
+
+        internal static Expression ToNonNullableExpression(this MemberExpression memberField)
+        {
+            Type typeIfNullable = Nullable.GetUnderlyingType(memberField.Type);
+            return typeIfNullable != null ? Expression.Convert(memberField, typeIfNullable) : memberField;
+        }
     }
 }

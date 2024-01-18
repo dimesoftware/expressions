@@ -16,7 +16,5 @@ namespace Dime.Expressions.EF.Tests.Mock
         }
 
         public DbSet<Person> People { get; set; }
-
-        public DbSet<Characteristic> Characteristics { get; set; }
     }
 }

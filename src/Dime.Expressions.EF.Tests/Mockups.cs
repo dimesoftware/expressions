@@ -12,10 +12,13 @@ namespace Dime.Expressions.Tests
         public bool IsGolfer { get; set; }
         public bool? IsPederast { get; set; }
         public PlayerType Type { get; set; }
+        public PlayerType? SecondaryType { get; set; }
 
         public DateTime BirthDate { get; set; }
         public DateTime? JoinedNam { get; set; }
         public double Height { get; set; }
+        public double? Score { get; set; }
+
         public decimal Width { get; set; }
         public decimal? Length { get; set; }
         public Characteristic Characteristic { get; set; }
@@ -38,10 +41,13 @@ namespace Dime.Expressions.Tests
         public bool IsGolfer { get; set; }
         public bool? IsPederast { get; set; }
         public PlayerType Type { get; set; }
+        public PlayerType? SecondaryType { get; set; }
 
         public DateTime BirthDate { get; set; }
         public DateTime? JoinedNam { get; set; }
         public double Height { get; set; }
+        public double? Score { get; set; }
+
         public decimal Width { get; set; }
         public decimal? Length { get; set; }
     }

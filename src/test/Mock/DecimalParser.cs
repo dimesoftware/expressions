@@ -14,7 +14,7 @@ namespace Dime.Expressions.Tests.Mock
 
         public decimal ConvertFrom(object value)
         {
-            CultureInfo culture = new(Culture);
+            CultureInfo culture = new CultureInfo(Culture);
             NumberFormatInfo formatInfo = (NumberFormatInfo)culture.GetFormat(typeof(NumberFormatInfo));
             decimal.TryParse(value.ToString(), NumberStyles.Number, formatInfo, out decimal db);
 

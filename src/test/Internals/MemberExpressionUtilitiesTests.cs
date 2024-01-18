@@ -26,7 +26,7 @@ namespace Dime.Expressions.Tests.Internals
         [TestCategory("Filter")]
         public void MemberExpressionUtilities_GetExpression_FieldIsNavigationProperty_HasDefaultDisplay_TakesCategory_ShouldReturnOne()
         {
-            List<Person> persons = new()
+            List<Person> persons = new List<Person>
             {
                 new Person { Characteristic = new Characteristic {Category = "Hello world"}},
                 new Person { Characteristic = new Characteristic {Category = "No hello world"}},
@@ -43,7 +43,7 @@ namespace Dime.Expressions.Tests.Internals
         [TestCategory("Filter")]
         public void MemberExpressionUtilities_GetExpression_FieldIsScalarPropertyInsideNavigationProperty_ShouldThrowArgumentException()
         {
-            List<Person> persons = new()
+            List<Person> persons = new List<Person>
             {
                 new Person { Characteristic = new Characteristic {Category = "Hello world"}},
                 new Person { Characteristic = new Characteristic {Category = "No hello world"}},

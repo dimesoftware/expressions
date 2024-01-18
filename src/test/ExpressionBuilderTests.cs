@@ -109,7 +109,7 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new()
+            List<Person> persons = new List<Person>
             {
                 new Person
                 {
@@ -152,7 +152,7 @@ namespace Dime.Expressions.Tests
                 }
             };
 
-            ExpressionBuilder builder = new();
+            ExpressionBuilder builder = new ExpressionBuilder();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -180,7 +180,7 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new()
+            List<Person> persons = new List<Person>
             {
                 new Person
                 {
@@ -229,7 +229,7 @@ namespace Dime.Expressions.Tests
                 }
             };
 
-            ExpressionBuilder builder = new();
+            ExpressionBuilder builder = new ExpressionBuilder();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -337,7 +337,7 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new()
+            List<Person> persons = new List<Person>
             {
                 new Person
                 {
@@ -386,7 +386,7 @@ namespace Dime.Expressions.Tests
                 }
             };
 
-            ExpressionBuilder builder = new();
+            ExpressionBuilder builder = new ExpressionBuilder();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -424,7 +424,7 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new()
+            List<Person> persons = new List<Person>
             {
                 new Person
                 {
@@ -473,7 +473,7 @@ namespace Dime.Expressions.Tests
                 }
             };
 
-            ExpressionBuilder builder = new();
+            ExpressionBuilder builder = new ExpressionBuilder();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -496,7 +496,7 @@ namespace Dime.Expressions.Tests
         [TestMethod]
         public void ExpressionBuilder_GetExpression_MissingOperator_ThrowsArgumentExceptionException()
         {
-            ExpressionBuilder builder = new();
+            ExpressionBuilder builder = new ExpressionBuilder();
             builder.WithDateTimeParser(new DateTimeParser("", new CultureInfo("")));
             builder.WithDoubleParser(new DoubleParser(""));
             builder.WithDecimalParser(new DecimalParser(""));
