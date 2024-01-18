@@ -134,60 +134,60 @@ namespace System.Linq.Expressions
             // Convert expression
             return comparingExpression == null ? null : Expression.Lambda<Func<T, bool>>(comparingExpression, param);
         }
-       
+
         private static Expression DoesNotContain(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
                 ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type)))
                 : null;
-       
+
         private static Expression Like(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("Contains")
-                ? Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.Type))
+                ? Expression.Call(memberField, memberField.GetOperator("Contains"), Expression.Convert(constant, memberField.ToNonNullableType()))
                 : Equals(memberField, constant);
-    
+
         private static Expression DoesNotStartWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("StartsWith")
-                ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.Type)))
+                ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.ToNonNullableType())))
                 : null;
-      
+
         private static Expression DoesNotEndWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("EndsWith")
-                ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.Type)))
+                ? Expression.Not(Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.ToNonNullableType())))
                 : null;
-     
+
         private static Expression StartsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("StartsWith")
-                ? Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.Type))
+                ? Expression.Call(memberField, memberField.GetOperator("StartsWith"), Expression.Convert(constant, memberField.ToNonNullableType()))
                 : null;
-       
+
         private static Expression EndsWith(MemberExpression memberField, Expression constant)
             => memberField.HasOperator("EndsWith")
-                ? Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.Type))
+                ? Expression.Call(memberField, memberField.GetOperator("EndsWith"), Expression.Convert(constant, memberField.ToNonNullableType()))
                 : null;
-    
-        private static Expression GreaterThanOrEqual(Expression memberField, Expression constant)
-            => Expression.GreaterThanOrEqual(memberField, Expression.Convert(constant, memberField.Type));
-     
-        private static Expression GreaterThan(Expression memberField, Expression constant)
-            => Expression.GreaterThan(memberField, Expression.Convert(constant, memberField.Type));
-      
-        private static Expression LessThan(Expression memberField, Expression constant)
-            => Expression.LessThan(memberField, Expression.Convert(constant, memberField.Type));
-      
-        private static Expression LessThanOrEqual(Expression memberField, Expression constant)
-            => Expression.LessThanOrEqual(memberField, Expression.Convert(constant, memberField.Type));
-       
-        private static Expression Equals(Expression memberField, Expression constant)
+
+        private static Expression GreaterThanOrEqual(MemberExpression memberField, Expression constant)
+            => Expression.GreaterThanOrEqual(memberField, Expression.Convert(constant, memberField.ToNonNullableType()));
+
+        private static Expression GreaterThan(MemberExpression memberField, Expression constant)
+            => Expression.GreaterThan(memberField, Expression.Convert(constant, memberField.ToNonNullableType()));
+
+        private static Expression LessThan(MemberExpression memberField, Expression constant)
+            => Expression.LessThan(memberField, Expression.Convert(constant, memberField.ToNonNullableType()));
+
+        private static Expression LessThanOrEqual(MemberExpression memberField, Expression constant)
+            => Expression.LessThanOrEqual(memberField, Expression.Convert(constant, memberField.ToNonNullableType()));
+
+        private static Expression Equals(MemberExpression memberField, Expression constant)
             => Expression.Equal(memberField, Expression.Convert(constant, memberField.Type));
-       
-        private static Expression NotEquals(Expression memberField, Expression constant)
+
+        private static Expression NotEquals(MemberExpression memberField, Expression constant)
             => Expression.NotEqual(memberField, Expression.Convert(constant, memberField.Type));
-      
+
         private static Expression IsNotNullOrEmpty(MemberExpression memberField)
             => memberField.HasOperator("IsNullOrEmpty")
                 ? Expression.Not(Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField))
                 : null;
-       
+
         private static Expression IsNullOrEmpty(MemberExpression memberField)
             => memberField.HasOperator("IsNullOrEmpty")
                 ? Expression.Call(typeof(string), nameof(string.IsNullOrEmpty), null, memberField)

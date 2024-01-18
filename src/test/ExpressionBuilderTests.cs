@@ -109,7 +109,7 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new List<Person>
+            List<Person> persons = new()
             {
                 new Person
                 {
@@ -152,7 +152,7 @@ namespace Dime.Expressions.Tests
                 }
             };
 
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -180,7 +180,7 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new List<Person>
+            List<Person> persons = new()
             {
                 new Person
                 {
@@ -229,7 +229,7 @@ namespace Dime.Expressions.Tests
                 }
             };
 
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -337,7 +337,7 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new List<Person>
+            List<Person> persons = new()
             {
                 new Person
                 {
@@ -386,7 +386,94 @@ namespace Dime.Expressions.Tests
                 }
             };
 
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
+            builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
+            builder.WithDoubleParser(new DoubleParser(culture));
+            builder.WithDecimalParser(new DecimalParser(culture));
+
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
+            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
+            navigationProperty.Add(new KeyValuePair<int, string>(2, property));
+
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, operation, value, "");
+            if (generatesNull == true)
+            {
+                Assert.IsNull(expr);
+                return;
+            }
+
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == expectedCount);
+        }
+
+        [DataTestMethod]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "12-4-2000", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "12-4-2000 18:05:02", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "12-4-2000", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "12-4-2000 18:05:02", 0, false)]
+        public void ExpressionBuilder_GetExpression_NavigationProperty_NullableDateTime(
+            string culture,
+            string timezone,
+            string property,
+            string operation,
+            string value,
+            int expectedCount,
+            bool? generatesNull = false)
+        {
+            List<Person> persons = new()
+            {
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Bowler,
+                        IsGolfer = false,
+                        Name = "Jeffrey Lebowski",
+                        Height = 185.25,
+                        Width = 185.25M,
+                        Length = 185.25M,
+                        BirthDate = new DateTime(1942, 12,4),
+                        JoinedNam = new DateTime(2000, 12,4),
+                        IsPederast = false
+                    }
+                },
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Bowler,
+                        IsGolfer = false,
+                        Name = "Jeffrey Lebowski",
+                        Height = 185.25,
+                        Width = 185.25M,
+                        Length =  185.25M,
+                        BirthDate = new DateTime(1942, 12,4, 18,5,2),
+                        JoinedNam = new DateTime(2000, 12,4, 18,5,2),
+                        IsPederast = false
+                    }
+                },
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Golfer,
+                        IsGolfer = true,
+                        Name = "Walter Sobchak",
+                        Height = 193.64,
+                        Width = 193.64M,
+                        Length = 193.64M,
+                        BirthDate = new DateTime(1940,1,5),
+                        JoinedNam = new DateTime(2000,1,5),
+                        IsPederast = true
+                    }
+                }
+            };
+
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -409,7 +496,7 @@ namespace Dime.Expressions.Tests
         [TestMethod]
         public void ExpressionBuilder_GetExpression_MissingOperator_ThrowsArgumentExceptionException()
         {
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser("", new CultureInfo("")));
             builder.WithDoubleParser(new DoubleParser(""));
             builder.WithDecimalParser(new DecimalParser(""));
