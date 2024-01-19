@@ -153,6 +153,7 @@ namespace Dime.Expressions.EF.Tests
         [InlineData("en-US", "Europe/Paris", "BirthDate", "like", "12-4-1942 18:05:02", 1, false)]
         [InlineData("nl-BE", "Europe/Paris", "BirthDate", "like", "12-4-1942", 0, false)]
         [InlineData("nl-BE", "Europe/Paris", "BirthDate", "like", "12-4-1942 18:05:02", 0, false)]
+        [InlineData("nl-BE", "Europe/Paris", "BirthDate", "gt", "12-4-1935 18:05:02", 3, false)]
         public void ExpressionBuilder_GetExpression_NavigationProperty_DateTime(string culture, string timezone, string property, string operation, string value, int expectedCount, bool? generatesNull = false)
             => Test(culture, timezone, property, operation, value, expectedCount, generatesNull);
 
