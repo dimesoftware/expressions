@@ -21,6 +21,12 @@ namespace System.Linq.Expressions
             return this;
         }
 
+        public ExpressionBuilder WithDateOnlyParser(IParser<DateOnly> parser)
+        {
+            Descriptor.AddParser(parser);
+            return this;
+        }
+
         /// <summary>
         /// Fluent API for adding a parser for the <see cref="double"/> struct
         /// </summary>

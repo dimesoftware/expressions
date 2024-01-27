@@ -504,5 +504,46 @@ namespace Dime.Expressions.Tests
             Assert.ThrowsException<ArgumentException>(() =>
                 ((IFilterExpressionBuilder)builder).GetExpression<Person>("Type", "", "1"));
         }
+
+
+        [TestMethod]
+        public void ExpressionBuilder_GetExpression_DateOnly()
+        {
+            List<Person> persons = new List<Person>
+            {
+                new Person{ StartDate = new DateOnly(2024,1,1)},
+                new Person{ StartDate = new DateOnly(2024,1,1)},
+                new Person{ StartDate = new DateOnly(2024,1,2)},
+            };
+
+            ExpressionBuilder builder = new ExpressionBuilder();
+            builder.WithDateOnlyParser(new DateOnlyParser("", new CultureInfo("")));
+
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>("StartDate", "eq", "2024-1-1 00:00:00");
+
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == 2);
+        }
+
+        [TestMethod]
+        public void ExpressionBuilder_GetExpression_NavigationProperty_DateOnly()
+        {
+            List<Person> persons = new List<Person>
+            {
+                new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 1) } },
+                new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 1) } },
+                new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 2) } },
+            };
+
+            ExpressionBuilder builder = new ExpressionBuilder();
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
+            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
+            navigationProperty.Add(new KeyValuePair<int, string>(2, "StartDate"));
+
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, "eq", "2024-1-1", null);
+
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == 2);
+        }
     }
 }

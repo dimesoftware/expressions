@@ -13,6 +13,7 @@ namespace Dime.Expressions.Tests
         public bool? IsPederast { get; set; }
         public PlayerType Type { get; set; }
 
+        public DateOnly StartDate { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime? JoinedNam { get; set; }
         public double Height { get; set; }
@@ -39,6 +40,7 @@ namespace Dime.Expressions.Tests
         public bool? IsPederast { get; set; }
         public PlayerType Type { get; set; }
 
+        public DateOnly StartDate { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime? JoinedNam { get; set; }
         public double Height { get; set; }

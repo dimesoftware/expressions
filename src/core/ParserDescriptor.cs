@@ -32,6 +32,9 @@ namespace System.Linq.Expressions
                 case DateTimeConverter _:
                     return _parsers.FirstOrDefault(x => x is IParser<DateTime>);
 
+                case DateOnlyConverter _:
+                    return _parsers.FirstOrDefault(x => x is IParser<DateOnly>);
+
                 case DecimalConverter _:
                     return _parsers.FirstOrDefault(x => x is IParser<decimal>);
 
@@ -42,6 +45,8 @@ namespace System.Linq.Expressions
                         return GetParser(new DecimalConverter());
                     else if (underlyingType == typeof(DateTime))
                         return GetParser(new DateTimeConverter());
+                    else if (underlyingType == typeof(DateOnly))
+                        return GetParser(new DateOnlyConverter());
                     else if (underlyingType == typeof(double))
                         return GetParser(new DoubleConverter());
 
