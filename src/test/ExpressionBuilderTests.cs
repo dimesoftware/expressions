@@ -406,6 +406,93 @@ namespace Dime.Expressions.Tests
             Assert.IsTrue(items.Count == expectedCount);
         }
 
+        [DataTestMethod]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 0, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "12-4-2000", 1, false)]
+        [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "12-4-2000 18:05:02", 1, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "12-4-2000", 0, false)]
+        [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "12-4-2000 18:05:02", 0, false)]
+        public void ExpressionBuilder_GetExpression_NavigationProperty_NullableDateTime(
+            string culture,
+            string timezone,
+            string property,
+            string operation,
+            string value,
+            int expectedCount,
+            bool? generatesNull = false)
+        {
+            List<Person> persons = new List<Person>
+            {
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Bowler,
+                        IsGolfer = false,
+                        Name = "Jeffrey Lebowski",
+                        Height = 185.25,
+                        Width = 185.25M,
+                        Length = 185.25M,
+                        BirthDate = new DateTime(1942, 12,4),
+                        JoinedNam = new DateTime(2000, 12,4),
+                        IsPederast = false
+                    }
+                },
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Bowler,
+                        IsGolfer = false,
+                        Name = "Jeffrey Lebowski",
+                        Height = 185.25,
+                        Width = 185.25M,
+                        Length =  185.25M,
+                        BirthDate = new DateTime(1942, 12,4, 18,5,2),
+                        JoinedNam = new DateTime(2000, 12,4, 18,5,2),
+                        IsPederast = false
+                    }
+                },
+                new Person
+                {
+                    Characteristic = new Characteristic()
+                    {
+                        Type = PlayerType.Golfer,
+                        IsGolfer = true,
+                        Name = "Walter Sobchak",
+                        Height = 193.64,
+                        Width = 193.64M,
+                        Length = 193.64M,
+                        BirthDate = new DateTime(1940,1,5),
+                        JoinedNam = new DateTime(2000,1,5),
+                        IsPederast = true
+                    }
+                }
+            };
+
+            ExpressionBuilder builder = new ExpressionBuilder();
+            builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
+            builder.WithDoubleParser(new DoubleParser(culture));
+            builder.WithDecimalParser(new DecimalParser(culture));
+
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
+            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
+            navigationProperty.Add(new KeyValuePair<int, string>(2, property));
+
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, operation, value, "");
+            if (generatesNull == true)
+            {
+                Assert.IsNull(expr);
+                return;
+            }
+
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == expectedCount);
+        }
+
         [TestMethod]
         public void ExpressionBuilder_GetExpression_MissingOperator_ThrowsArgumentExceptionException()
         {
@@ -416,6 +503,47 @@ namespace Dime.Expressions.Tests
 
             Assert.ThrowsException<ArgumentException>(() =>
                 ((IFilterExpressionBuilder)builder).GetExpression<Person>("Type", "", "1"));
+        }
+
+
+        [TestMethod]
+        public void ExpressionBuilder_GetExpression_DateOnly()
+        {
+            List<Person> persons = new List<Person>
+            {
+                new Person{ StartDate = new DateOnly(2024,1,1)},
+                new Person{ StartDate = new DateOnly(2024,1,1)},
+                new Person{ StartDate = new DateOnly(2024,1,2)},
+            };
+
+            ExpressionBuilder builder = new ExpressionBuilder();
+            builder.WithDateOnlyParser(new DateOnlyParser("", new CultureInfo("")));
+
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>("StartDate", "eq", "2024-1-1 00:00:00");
+
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == 2);
+        }
+
+        [TestMethod]
+        public void ExpressionBuilder_GetExpression_NavigationProperty_DateOnly()
+        {
+            List<Person> persons = new List<Person>
+            {
+                new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 1) } },
+                new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 1) } },
+                new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 2) } },
+            };
+
+            ExpressionBuilder builder = new ExpressionBuilder();
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
+            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
+            navigationProperty.Add(new KeyValuePair<int, string>(2, "StartDate"));
+
+            Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, "eq", "2024-1-1", null);
+
+            ICollection<Person> items = persons.Where(expr.Compile()).ToList();
+            Assert.IsTrue(items.Count == 2);
         }
     }
 }

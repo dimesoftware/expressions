@@ -36,5 +36,17 @@ namespace System.Linq.Expressions
 
         internal static MethodInfo GetOperator(this MemberExpression memberField, string operation)
             => memberField.Type.GetMethod(operation, new[] { memberField.Type });
+
+        internal static Type ToNonNullableType(this MemberExpression memberField)
+        {
+            Type typeIfNullable = Nullable.GetUnderlyingType(memberField.Type);
+            return typeIfNullable ?? memberField.Type;
+        }
+
+        internal static Expression ToNonNullableExpression(this MemberExpression memberField)
+        {
+            Type typeIfNullable = Nullable.GetUnderlyingType(memberField.Type);
+            return typeIfNullable != null ? Expression.Convert(memberField, typeIfNullable) : memberField;
+        }
     }
 }

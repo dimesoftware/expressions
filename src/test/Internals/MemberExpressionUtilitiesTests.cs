@@ -35,7 +35,7 @@ namespace Dime.Expressions.Tests.Internals
             IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder();
             Expression<Func<Person, bool>> expr = expressionBuilder.GetExpression<Person>("Characteristic", "like", "Hello world");
 
-            var items = persons.Where(expr.Compile());
+            IEnumerable<Person> items = persons.Where(expr.Compile());
             Assert.IsTrue(items.Count() == 1);
         }
 

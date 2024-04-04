@@ -16,7 +16,7 @@ namespace System.Linq.Expressions
         /// <returns>The enum that matches the description - or the enum's default value if no match was made.</returns>
         internal static T GetValueFromDescription<T>(this string description)
         {
-            var type = typeof(T);
+            Type type = typeof(T);
             if (!type.GetTypeInfo().IsEnum)
                 throw new InvalidOperationException();
 

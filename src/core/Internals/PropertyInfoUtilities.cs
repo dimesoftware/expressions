@@ -13,15 +13,15 @@ namespace System.Linq.Expressions.Internals
         internal static object ParseValue(this MemberExpression memberField, object value)
         {
             PropertyInfo propertyInfo = memberField.Member as PropertyInfo;
+            Type memberType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
 
-            if (!propertyInfo.PropertyType.IsEnum)
-                return value;
+            if (memberType?.IsEnum ?? false)
+            {
+                string valueAsString = (value ?? "0").ToString();
+                return int.TryParse(valueAsString, out int enumValue) ? Enum.ToObject(memberType, enumValue) : value;
+            }
 
-            string valueAsString = (value ?? "0").ToString();
-
-            return int.TryParse(valueAsString, out int enumValue)
-                ? Enum.ToObject(propertyInfo.PropertyType, enumValue)
-                : value;
+            return value;
         }
     }
 }

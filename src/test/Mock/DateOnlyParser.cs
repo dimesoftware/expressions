@@ -7,14 +7,14 @@ namespace Dime.Expressions.Tests
     /// <summary>
     /// Represents a custom date time parser that takes a custom time zone (therefore ignoring any time zone indicated in the original date time instance) into account
     /// </summary>
-    public class DateTimeParser : IParser<DateTime>, IParser<DateTime?>
+    public class DateOnlyParser : IParser<DateOnly>, IParser<DateOnly?>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeParser"/> class
+        /// Initializes a new instance of the <see cref="DateOnlyParser"/> class
         /// </summary>
         /// <param name="timeZone">The time zone</param>
         /// <param name="culture"></param>
-        public DateTimeParser(string timeZone, CultureInfo culture)
+        public DateOnlyParser(string timeZone, CultureInfo culture)
         {
             TimeZone = timeZone;
             Culture = culture;
@@ -42,7 +42,7 @@ namespace Dime.Expressions.Tests
         /// </summary>
         /// <param name="value">The value which needs to be converted to a <see cref="DateTime"/> instance</param>
         /// <returns>An instance of <see cref="DateTime"/></returns>
-        DateTime? IParser<DateTime?>.ConvertFrom(object value)
+        DateOnly? IParser<DateOnly?>.ConvertFrom(object value)
             => ConvertFrom(value);
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Dime.Expressions.Tests
         /// </summary>
         /// <param name="value">The value which needs to be converted to a <see cref="DateTime"/> instance</param>
         /// <returns>An instance of <see cref="DateTime"/></returns>
-        public DateTime ConvertFrom(object value)
-            => DateTime.Parse(value.ToString(), Culture);
+        public DateOnly ConvertFrom(object value)
+            => DateOnly.FromDateTime(DateTime.Parse(value.ToString(), Culture));
     }
 }
