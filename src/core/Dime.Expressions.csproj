@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 		<AssemblyName>Dime.Expressions</AssemblyName>
 		<LangVersion>latest</LangVersion>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -10,16 +10,16 @@
 		<AssemblyTitle>Dime.Expressions</AssemblyTitle>
 		<Authors>Dime Software</Authors>
 		<RootNamespace>Dime.Expressions</RootNamespace>
-		<Copyright>Copyright © 2023</Copyright>
+		<Copyright>Copyright © 2024</Copyright>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/dimesoftware/expressions</RepositoryUrl>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.2.0</Version>
+		<Version>2.0.0</Version>
 		<NeutralLanguage>en</NeutralLanguage>
-		<AssemblyVersion>1.1.0.0</AssemblyVersion>
-		<FileVersion>1.1.0.0</FileVersion>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+		<FileVersion>2.0.0.0</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
