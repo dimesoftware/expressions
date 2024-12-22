@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\core\Dime.Expressions.csproj" />
+		<ProjectReference Include="..\..\core\Dime.Expressions.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -22,7 +22,7 @@
 		<PackageReference Include="MSTest.TestFramework" Version="3.6.3" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\core\Dime.Expressions.csproj" />
+		<ProjectReference Include="..\..\core\Dime.Expressions.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
