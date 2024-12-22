@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dime.Expressions", "core\Di
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{906E3127-79E0-467C-B9A5-5D0C9C72F61E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dime.Expressions.Tests", "test\Dime.Expressions.Tests.csproj", "{30EA7462-35E3-4CE4-811B-E870087A46CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dime.Expressions.Tests", "tests\Dime.Expressions.Tests\Dime.Expressions.Tests.csproj", "{30EA7462-35E3-4CE4-811B-E870087A46CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dime.Expressions.EF.Tests", "Dime.Expressions.EF.Tests\Dime.Expressions.EF.Tests.csproj", "{F418332B-8DAB-49B7-B116-545F93412DC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dime.Expressions.EF.Tests", "tests\Dime.Expressions.EF.Tests\Dime.Expressions.EF.Tests.csproj", "{F418332B-8DAB-49B7-B116-545F93412DC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
