@@ -18,8 +18,15 @@ namespace Dime.Expressions.Tests
         public void ExpressionChain_And_ArgumentNull_ThrowsArgumentNullException()
         {
             Expression<Func<Person, bool>>[] includes = null;
-            ArgumentNullException ex = Assert.ThrowsException<ArgumentNullException>(() => ExpressionChain.And(includes));
-            Assert.AreEqual(ex.Message, "Value cannot be null. (Parameter 'expressions')");
+            try
+            {
+                ExpressionChain.And(includes);
+                Assert.Fail("Expected ArgumentNullException was not thrown");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Assert.AreEqual("Value cannot be null. (Parameter 'expressions')", ex.Message);
+            }
         }
 
         [TestMethod]
@@ -29,7 +36,7 @@ namespace Dime.Expressions.Tests
             Expression<Func<Person, bool>> f1 = x => x.Id > 0;
             Expression<Func<Person, bool>> mergedExpression = ExpressionChain.And(f1);
 
-            Assert.IsTrue(mergedExpression == f1);
+            Assert.AreEqual(f1, mergedExpression);
         }
 
         [TestMethod]
@@ -48,7 +55,7 @@ namespace Dime.Expressions.Tests
                 new() { Id = 3, Category = "CATEGORY 2" },
             }.AsQueryable();
 
-            Assert.IsTrue(mockups.Where(mergedExpression).Count() == 2);
+            Assert.AreEqual(2, mockups.Where(mergedExpression).Count());
         }
 
         [TestMethod]
@@ -68,7 +75,7 @@ namespace Dime.Expressions.Tests
                 new() { Id = 3, Category = "CATEGORY 2", Name = "Dude" },
             }.AsQueryable();
 
-            Assert.IsTrue(mockups.Where(mergedExpression).Count() == 2);
+            Assert.AreEqual(2, mockups.Where(mergedExpression).Count());
         }
 
         [TestMethod]
@@ -89,7 +96,7 @@ namespace Dime.Expressions.Tests
                 new() { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA" }, // Miss: Category
             }.AsQueryable();
 
-            Assert.IsTrue(mockups.Where(mergedExpression).Count() == 1);
+            Assert.AreEqual(1, mockups.Where(mergedExpression).Count());
         }
 
         [TestMethod]
@@ -111,7 +118,7 @@ namespace Dime.Expressions.Tests
                 new() { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA", IsGolfer = true },
             }.AsQueryable();
 
-            Assert.IsTrue(mockups.Where(mergedExpression).Count() == 2);
+            Assert.AreEqual(2, mockups.Where(mergedExpression).Count());
         }
 
         [TestMethod]
@@ -119,8 +126,15 @@ namespace Dime.Expressions.Tests
         public void ExpressionChain_Or_ArgumentNull_ThrowsArgumentNullException()
         {
             Expression<Func<Person, bool>>[] includes = null;
-            ArgumentNullException ex = Assert.ThrowsException<ArgumentNullException>(() => ExpressionChain.Or(includes));
-            Assert.AreEqual(ex.Message, "Value cannot be null. (Parameter 'expressions')");
+            try
+            {
+                ExpressionChain.Or(includes);
+                Assert.Fail("Expected ArgumentNullException was not thrown");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Assert.AreEqual("Value cannot be null. (Parameter 'expressions')", ex.Message);
+            }
         }
 
         [TestMethod]
@@ -130,7 +144,7 @@ namespace Dime.Expressions.Tests
             Expression<Func<Person, bool>> f1 = x => x.Id > 0;
             Expression<Func<Person, bool>> mergedExpression = ExpressionChain.Or(f1);
 
-            Assert.IsTrue(mergedExpression == f1);
+            Assert.AreEqual(f1, mergedExpression);
         }
 
         [TestMethod]
@@ -149,7 +163,7 @@ namespace Dime.Expressions.Tests
                 new() { Id = 3, Category = "CATEGORY 2" },
             }.AsQueryable();
 
-            Assert.IsTrue(mockups.Where(mergedExpression).Count() == 4);
+            Assert.AreEqual(4, mockups.Where(mergedExpression).Count());
         }
 
         [TestMethod]
@@ -169,7 +183,7 @@ namespace Dime.Expressions.Tests
                 new() { Id = 3, Category = "CATEGORY 2", Name = "Dude" },
             }.AsQueryable();
 
-            Assert.IsTrue(mockups.Where(mergedExpression).Count() == 4);
+            Assert.AreEqual(4, mockups.Where(mergedExpression).Count());
         }
 
         [TestMethod]
@@ -190,7 +204,7 @@ namespace Dime.Expressions.Tests
                 new() { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA" },
             }.AsQueryable();
 
-            Assert.IsTrue(mockups.Where(mergedExpression).Count() == 4);
+            Assert.AreEqual(4, mockups.Where(mergedExpression).Count());
         }
 
         [TestMethod]
@@ -212,7 +226,79 @@ namespace Dime.Expressions.Tests
                 new() { Id = 3, Category = "CATEGORY 2", Name = "Dude", City = "LA", IsGolfer = true },
             }.AsQueryable();
 
-            Assert.IsTrue(mockups.Where(mergedExpression).Count() == 4);
+            Assert.AreEqual(4, mockups.Where(mergedExpression).Count());
+        }
+
+        [TestMethod]
+        [TestCategory("Filter")]
+        public void ExpressionChain_And_NullLeftExpression_ReturnsRightExpression()
+        {
+            Expression<Func<Person, bool>> leftExpr = null;
+            Expression<Func<Person, bool>> rightExpr = x => x.Id > 0;
+
+            Expression<Func<Person, bool>> result = leftExpr.And(rightExpr);
+
+            Assert.AreEqual(rightExpr, result);
+        }
+
+        [TestMethod]
+        [TestCategory("Filter")]
+        public void ExpressionChain_And_NullRightExpression_ReturnsLeftExpression()
+        {
+            Expression<Func<Person, bool>> leftExpr = x => x.Id > 0;
+            Expression<Func<Person, bool>> rightExpr = null;
+
+            Expression<Func<Person, bool>> result = leftExpr.And(rightExpr);
+
+            Assert.AreEqual(leftExpr, result);
+        }
+
+        [TestMethod]
+        [TestCategory("Filter")]
+        public void ExpressionChain_And_BothNull_ReturnsNull()
+        {
+            Expression<Func<Person, bool>> leftExpr = null;
+            Expression<Func<Person, bool>> rightExpr = null;
+
+            Expression<Func<Person, bool>> result = leftExpr.And(rightExpr);
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        [TestCategory("Filter")]
+        public void ExpressionChain_Or_NullLeftExpression_ReturnsRightExpression()
+        {
+            Expression<Func<Person, bool>> leftExpr = null;
+            Expression<Func<Person, bool>> rightExpr = x => x.Id > 0;
+
+            Expression<Func<Person, bool>> result = leftExpr.Or(rightExpr);
+
+            Assert.AreEqual(rightExpr, result);
+        }
+
+        [TestMethod]
+        [TestCategory("Filter")]
+        public void ExpressionChain_Or_NullRightExpression_ReturnsLeftExpression()
+        {
+            Expression<Func<Person, bool>> leftExpr = x => x.Id > 0;
+            Expression<Func<Person, bool>> rightExpr = null;
+
+            Expression<Func<Person, bool>> result = leftExpr.Or(rightExpr);
+
+            Assert.AreEqual(leftExpr, result);
+        }
+
+        [TestMethod]
+        [TestCategory("Filter")]
+        public void ExpressionChain_Or_BothNull_ReturnsNull()
+        {
+            Expression<Func<Person, bool>> leftExpr = null;
+            Expression<Func<Person, bool>> rightExpr = null;
+
+            Expression<Func<Person, bool>> result = leftExpr.Or(rightExpr);
+
+            Assert.IsNull(result);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace System.Linq.Expressions
             /// <param name="map">The dictionary of parameters</param>
             private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
-                _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
+                _map = map ?? [];
             }
 
             /// <summary>

@@ -11,8 +11,8 @@ namespace Dime.Expressions.EF.Tests.Mock
             CustomerDbContext context = new(options);
             context.Database.EnsureDeleted();
 
-            List<Person> people = new()
-            {
+            List<Person> people =
+            [
                 new Person
                 {
                     Id = 1,
@@ -112,7 +112,7 @@ namespace Dime.Expressions.EF.Tests.Mock
                         City = "LA",
                     }
                 }
-            };
+            ];
 
             context.People.AddRange(people);
             context.SaveChanges();

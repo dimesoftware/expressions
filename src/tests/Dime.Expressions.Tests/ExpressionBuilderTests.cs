@@ -11,7 +11,7 @@ namespace Dime.Expressions.Tests
     [TestClass]
     public class ExpressionBuilderTests
     {
-        [DataTestMethod]
+        [TestMethod]
 
         // ENUM Tests
         [DataRow("nl-BE", "Europe/Paris", "Type", "like", "1", 2, false)]
@@ -109,8 +109,8 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new List<Person>
-            {
+            List<Person> persons =
+            [
                 new Person
                 {
                     Id = 1,
@@ -150,9 +150,9 @@ namespace Dime.Expressions.Tests
                     JoinedNam = new DateTime(2000,1,5),
                     IsPederast = true
                 }
-            };
+            ];
 
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -166,10 +166,10 @@ namespace Dime.Expressions.Tests
             }
 
             ICollection<Person> items = persons.Where(expr.Compile()).ToList();
-            Assert.IsTrue(items.Count == expectedCount);
+            Assert.HasCount(expectedCount, items);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("nl-BE", "Europe/Paris", "Characteristic", "like", "Well, You Know, That's Just, Like, Your Opinion, Man", 2, false)]
         public void ExpressionBuilder_GetExpression_NavigationProperty_Root_UseDefaultDisplayAttribute(
             string culture,
@@ -180,8 +180,8 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new List<Person>
-            {
+            List<Person> persons =
+            [
                 new Person
                 {
                     Type = PlayerType.Bowler,
@@ -227,9 +227,9 @@ namespace Dime.Expressions.Tests
                         Category = "Smokey, this is not \'Nam. This is bowling. There are rules."
                     }
                 }
-            };
+            ];
 
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
@@ -243,10 +243,10 @@ namespace Dime.Expressions.Tests
             }
 
             ICollection<Person> items = persons.Where(expr.Compile()).ToList();
-            Assert.IsTrue(items.Count == expectedCount);
+            Assert.HasCount(expectedCount, items);
         }
 
-        [DataTestMethod]
+        [TestMethod]
 
         // ENUM Tests
         [DataRow("nl-BE", "Europe/Paris", "Type", "like", "1", 2, false)]
@@ -337,8 +337,8 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new List<Person>
-            {
+            List<Person> persons =
+            [
                 new Person
                 {
                     Characteristic = new Characteristic()
@@ -384,16 +384,18 @@ namespace Dime.Expressions.Tests
                         IsPederast = true
                     }
                 }
-            };
+            ];
 
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
 
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
-            navigationProperty.Add(new KeyValuePair<int, string>(2, property));
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>
+            {
+                { 1, "Characteristic" },
+                { 2, property }
+            };
 
             Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, operation, value, "");
             if (generatesNull == true)
@@ -403,10 +405,10 @@ namespace Dime.Expressions.Tests
             }
 
             ICollection<Person> items = persons.Where(expr.Compile()).ToList();
-            Assert.IsTrue(items.Count == expectedCount);
+            Assert.HasCount(expectedCount, items);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 1, false)]
         [DataRow("nl-BE", "Europe/Paris", "JoinedNam", "like", "4/12/2000 18:05:02", 1, false)]
         [DataRow("en-US", "Europe/Paris", "JoinedNam", "like", "4/12/2000", 0, false)]
@@ -424,8 +426,8 @@ namespace Dime.Expressions.Tests
             int expectedCount,
             bool? generatesNull = false)
         {
-            List<Person> persons = new List<Person>
-            {
+            List<Person> persons =
+            [
                 new Person
                 {
                     Characteristic = new Characteristic()
@@ -471,16 +473,18 @@ namespace Dime.Expressions.Tests
                         IsPederast = true
                     }
                 }
-            };
+            ];
 
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
 
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
-            navigationProperty.Add(new KeyValuePair<int, string>(2, property));
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>
+            {
+                { 1, "Characteristic" },
+                { 2, property }
+            };
 
             Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, operation, value, "");
             if (generatesNull == true)
@@ -490,60 +494,68 @@ namespace Dime.Expressions.Tests
             }
 
             ICollection<Person> items = persons.Where(expr.Compile()).ToList();
-            Assert.IsTrue(items.Count == expectedCount);
+            Assert.HasCount(expectedCount, items);
         }
 
         [TestMethod]
         public void ExpressionBuilder_GetExpression_MissingOperator_ThrowsArgumentExceptionException()
         {
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser("", new CultureInfo("")));
             builder.WithDoubleParser(new DoubleParser(""));
             builder.WithDecimalParser(new DecimalParser(""));
 
-            Assert.ThrowsException<ArgumentException>(() =>
-                ((IFilterExpressionBuilder)builder).GetExpression<Person>("Type", "", "1"));
+            try
+            {
+                ((IFilterExpressionBuilder)builder).GetExpression<Person>("Type", "", "1");
+                Assert.Fail("Expected ArgumentException was not thrown");
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.IsNotNull(ex);
+            }
         }
-
 
         [TestMethod]
         public void ExpressionBuilder_GetExpression_DateOnly()
         {
-            List<Person> persons = new List<Person>
-            {
+            List<Person> persons =
+            [
                 new Person{ StartDate = new DateOnly(2024,1,1)},
                 new Person{ StartDate = new DateOnly(2024,1,1)},
                 new Person{ StartDate = new DateOnly(2024,1,2)},
-            };
+            ];
 
-            ExpressionBuilder builder = new ExpressionBuilder();
+            ExpressionBuilder builder = new();
             builder.WithDateOnlyParser(new DateOnlyParser("", new CultureInfo("")));
 
             Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>("StartDate", "eq", "2024-1-1 00:00:00");
 
             ICollection<Person> items = persons.Where(expr.Compile()).ToList();
-            Assert.IsTrue(items.Count == 2);
+            Assert.HasCount(2, items);
         }
 
         [TestMethod]
         public void ExpressionBuilder_GetExpression_NavigationProperty_DateOnly()
         {
-            List<Person> persons = new List<Person>
-            {
+            List<Person> persons =
+            [
                 new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 1) } },
                 new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 1) } },
                 new Person{ Characteristic = new Characteristic() { StartDate = new DateOnly(2024, 1, 2) } },
-            };
+            ];
 
-            ExpressionBuilder builder = new ExpressionBuilder();
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
-            navigationProperty.Add(new KeyValuePair<int, string>(2, "StartDate"));
+            ExpressionBuilder builder = new();
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>
+            {
+                { 1, "Characteristic" },
+                { 2, "StartDate" }
+            };
 
             Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, "eq", "2024-1-1", null);
 
             ICollection<Person> items = persons.Where(expr.Compile()).ToList();
-            Assert.IsTrue(items.Count == 2);
+            Assert.HasCount(2, items);
         }
     }
 }

@@ -26,32 +26,61 @@ namespace Dime.Expressions.Tests.Internals
         [TestCategory("Filter")]
         public void MemberExpressionUtilities_GetExpression_FieldIsNavigationProperty_HasDefaultDisplay_TakesCategory_ShouldReturnOne()
         {
-            List<Person> persons = new List<Person>
-            {
+            List<Person> persons =
+            [
                 new Person { Characteristic = new Characteristic {Category = "Hello world"}},
                 new Person { Characteristic = new Characteristic {Category = "No hello world"}},
-            };
+            ];
 
             IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder();
             Expression<Func<Person, bool>> expr = expressionBuilder.GetExpression<Person>("Characteristic", "like", "Hello world");
 
             IEnumerable<Person> items = persons.Where(expr.Compile());
-            Assert.IsTrue(items.Count() == 1);
+            Assert.AreEqual(1, items.Count());
         }
 
         [TestMethod]
         [TestCategory("Filter")]
         public void MemberExpressionUtilities_GetExpression_FieldIsScalarPropertyInsideNavigationProperty_ShouldThrowArgumentException()
         {
-            List<Person> persons = new List<Person>
-            {
-                new Person { Characteristic = new Characteristic {Category = "Hello world"}},
-                new Person { Characteristic = new Characteristic {Category = "No hello world"}},
-            };
+            List<Person> persons =
+            [
+                new Person { Characteristic = new Characteristic { Category = "Hello world" } },
+                new Person { Characteristic = new Characteristic { Category = "No hello world" } },
+            ];
 
             IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder();
-            Assert.ThrowsException<ArgumentException>(
-                () => expressionBuilder.GetExpression<Person>("Characteristic.Category", "like", "Hello world"));
+            try
+            {
+                expressionBuilder.GetExpression<Person>("Characteristic.Category", "like", "Hello world");
+                Assert.Fail("Expected ArgumentException was not thrown");
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.IsNotNull(ex);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Filter")]
+        public void MemberExpressionUtilities_GetExpression_WithNavigationProperty_UsesDefaultDisplay()
+        {
+            // Arrange
+            List<Person> persons =
+            [
+                new Person { Characteristic = new Characteristic { Category = "Category1" } },
+                new Person { Characteristic = new Characteristic { Category = "Category2" } }
+            ];
+
+            IFilterExpressionBuilder expressionBuilder = new ExpressionBuilder();
+
+            // Act - Characteristic class has DefaultDisplay attribute pointing to Category
+            Expression<Func<Person, bool>> expr = expressionBuilder.GetExpression<Person>("Characteristic", "like", "Category1");
+            List<Person> result = persons.Where(expr.Compile()).ToList();
+
+            // Assert
+            Assert.HasCount(1, result);
+            Assert.AreEqual("Category1", result[0].Characteristic.Category);
         }
     }
 }

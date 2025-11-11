@@ -17,8 +17,10 @@ namespace Dime.Expressions.EF.Tests
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
 
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, property));
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>
+            {
+                { 1, property }
+            };
 
             Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, operation, value, "");
             if (generatesNull == true)
@@ -47,7 +49,7 @@ namespace Dime.Expressions.EF.Tests
         [InlineData("nl-BE", "Europe/Paris", "SecondaryType", "like", "1", 1, false)]
         [InlineData("en-US", "Europe/Paris", "SecondaryType", "like", "1", 1, false)]
         [InlineData("en-US", "Europe/Paris", "SecondaryType", "like", null, 0, false)]
-        public void ExpressionBuilder_GetExpression_NavigationProperty_NullableEnum(string culture, string timezone, string property, string operation, string value, int expectedCount, bool? generatesNull = false)
+        public void ExpressionBuilder_GetExpression_NavigationProperty_NullableEnum(string culture, string timezone, string property, string operation, string? value, int expectedCount, bool? generatesNull = false)
             => Test(culture, timezone, property, operation, value, expectedCount, generatesNull);
 
         [Theory]
@@ -169,16 +171,18 @@ namespace Dime.Expressions.EF.Tests
         public void ExpressionBuilder_GetExpression_NavigationProperty_NullableDateTime(string culture, string timezone, string property, string operation, string value, int expectedCount, bool? generatesNull = false)
             => Test(culture, timezone, property, operation, value, expectedCount, generatesNull);
 
-        private static void Test(string culture, string timezone, string property, string operation, string value, int expectedCount, bool? generatesNull)
+        private static void Test(string culture, string timezone, string property, string operation, string? value, int expectedCount, bool? generatesNull)
         {
             ExpressionBuilder builder = new();
             builder.WithDateTimeParser(new DateTimeParser(timezone, new CultureInfo(culture)));
             builder.WithDoubleParser(new DoubleParser(culture));
             builder.WithDecimalParser(new DecimalParser(culture));
 
-            IDictionary<int, string> navigationProperty = new Dictionary<int, string>();
-            navigationProperty.Add(new KeyValuePair<int, string>(1, "Characteristic"));
-            navigationProperty.Add(new KeyValuePair<int, string>(2, property));
+            IDictionary<int, string> navigationProperty = new Dictionary<int, string>
+            {
+                { 1, "Characteristic" },
+                { 2, property }
+            };
 
             Expression<Func<Person, bool>> expr = ((IFilterExpressionBuilder)builder).GetExpression<Person>(navigationProperty, operation, value, "");
             if (generatesNull == true)

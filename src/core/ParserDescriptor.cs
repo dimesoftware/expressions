@@ -8,7 +8,7 @@ namespace System.Linq.Expressions
     /// </summary>
     public class ParserDescriptor
     {
-        private readonly List<IParser> _parsers = new();
+        private readonly List<IParser> _parsers = [];
 
         /// <summary>
         /// Adds the parser to the descriptor

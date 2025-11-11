@@ -32,10 +32,10 @@ namespace System.Linq.Expressions
         }
 
         internal static bool HasOperator(this MemberExpression memberField, string operation)
-            => memberField.Type.GetMethod(operation, new[] { memberField.Type }) != null;
+            => memberField.Type.GetMethod(operation, [memberField.Type]) != null;
 
         internal static MethodInfo GetOperator(this MemberExpression memberField, string operation)
-            => memberField.Type.GetMethod(operation, new[] { memberField.Type });
+            => memberField.Type.GetMethod(operation, [memberField.Type]);
 
         internal static Type ToNonNullableType(this MemberExpression memberField)
         {

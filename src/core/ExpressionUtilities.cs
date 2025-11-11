@@ -14,7 +14,7 @@
         /// <exception cref="ArgumentException">Raised when the expression targets a scalar property</exception>
         public static string GetPropertyName<T>(this Expression<Func<T, object>> expression)
         {
-            if (!(expression.Body is MemberExpression memberExpr))
+            if (expression.Body is not MemberExpression memberExpr)
                 throw new ArgumentException("Expression body must be a member expression");
 
             string[] members = memberExpr.ToString().Split('.');

@@ -21,7 +21,7 @@ namespace Dime.Expressions.Tests
 
         public decimal Width { get; set; }
         public decimal? Length { get; set; }
-        public Characteristic Characteristic { get; set; }
+        public Characteristic Characteristic { get; set; } = null!;
     }
 
     public enum PlayerType

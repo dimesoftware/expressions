@@ -59,6 +59,6 @@ namespace Dime.Expressions.Tests
         /// <param name="value">The value which needs to be converted to a <see cref="DateTime"/> instance</param>
         /// <returns>An instance of <see cref="DateTime"/></returns>
         public DateTime ConvertFrom(object value)
-            => DateTime.Parse(value.ToString(), Culture);
+            => DateTime.Parse(value?.ToString() ?? string.Empty, Culture);
     }
 }
